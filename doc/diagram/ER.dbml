@@ -1,0 +1,118 @@
+Table Users {
+  user_id int [pk, increment]
+  name varchar(100)
+  email varchar(100) [unique]
+  password varchar(255)
+  role varchar(30)
+  phone varchar(20)
+  created_at datetime
+}
+
+Table Hotels {
+  hotel_id int [pk, increment]
+  owner_id int
+  hotel_name varchar(150)
+  location varchar(150)
+  description text
+  rating decimal(2,1)
+  address varchar(255)
+  status varchar(30)
+  created_at datetime
+}
+
+Table Rooms {
+  room_id int [pk, increment]
+  hotel_id int
+  room_type varchar(50)
+  price_per_night decimal(10,2)
+  capacity int
+  amenities text
+  availability boolean
+}
+
+Table Bookings {
+  booking_id int [pk, increment]
+  user_id int
+  room_id int
+  check_in date
+  check_out date
+  number_of_guests int
+  total_amount decimal(10,2)
+  booking_status varchar(30)
+  booked_at datetime
+}
+
+Table TripPlans {
+  trip_id int [pk, increment]
+  user_id int
+  destination varchar(150)
+  total_budget decimal(10,2)
+  number_of_days int
+  number_of_travelers int
+  estimated_hotel_cost decimal(10,2)
+  estimated_food_cost decimal(10,2)
+  estimated_travel_cost decimal(10,2)
+  estimated_activity_cost decimal(10,2)
+  total_estimated_cost decimal(10,2)
+  remaining_budget decimal(10,2)
+  created_at datetime
+}
+
+Table TouristPlaces {
+  place_id int [pk, increment]
+  name varchar(150)
+  location varchar(150)
+  description text
+  estimated_cost decimal(10,2)
+  visit_duration int
+  rating decimal(2,1)
+}
+
+Table TripPlaces {
+  trip_place_id int [pk, increment]
+  trip_id int
+  place_id int
+  day_number int
+  visit_order int
+}
+
+Table Payments {
+  payment_id int [pk, increment]
+  booking_id int
+  amount decimal(10,2)
+  payment_method varchar(30)
+  payment_status varchar(30)
+  payment_date datetime
+}
+
+Table Reviews {
+  review_id int [pk, increment]
+  user_id int
+  hotel_id int
+  rating int
+  comment text
+  created_at datetime
+}
+
+
+// Relationships
+
+Ref: Users.user_id < Hotels.owner_id
+
+Ref: Hotels.hotel_id < Rooms.hotel_id
+
+Ref: Users.user_id < Bookings.user_id
+
+Ref: Rooms.room_id < Bookings.room_id
+
+Ref: Users.user_id < TripPlans.user_id
+
+Ref: TripPlans.trip_id < TripPlaces.trip_id
+
+Ref: TouristPlaces.place_id < TripPlaces.place_id
+
+Ref: Bookings.booking_id - Payments.booking_id
+
+Ref: Users.user_id < Reviews.user_id
+
+Ref: Hotels.hotel_id < Reviews.hotel_id
