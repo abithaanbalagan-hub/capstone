@@ -13,6 +13,10 @@ body {
   min-height: 100vh;
 }
 
+/* =========================
+   HOME PAGE
+   ========================= */
+
 .app {
   min-height: 100vh;
 }
@@ -143,4 +147,90 @@ body {
 .feature-card p {
   color: #667085;
   line-height: 1.5;
+}
+
+
+/* =========================
+   LOGIN PAGE
+   ========================= */
+
+.login-page {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  background: linear-gradient(135deg, #eaf2ff, #ffffff);
+}
+
+.login-card {
+  width: 400px;
+  max-width: 100%;
+  padding: 40px;
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
+
+.login-card h1 {
+  margin: 0 0 10px;
+  text-align: center;
+  font-size: 32px;
+}
+
+.login-card > p {
+  text-align: center;
+  color: #667085;
+  margin: 0 0 30px;
+  line-height: 1.5;
+}
+
+.login-card form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.login-card label {
+  font-weight: bold;
+  font-size: 14px;
+  margin-top: 5px;
+}
+
+.login-card input {
+  width: 100%;
+  padding: 13px;
+  border: 1px solid #d0d5dd;
+  border-radius: 8px;
+  font-size: 15px;
+  outline: none;
+}
+
+.login-card input:focus {
+  border-color: #2563eb;
+}
+
+.login-card button {
+  margin-top: 10px;
+  padding: 13px;
+  border: none;
+  border-radius: 8px;
+  background: #2563eb;
+  color: white;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.login-card button:hover {
+  background: #1d4ed8;
+}
+
+.register-text {
+  margin-top: 25px !important;
+}
+
+.register-text span {
+  color: #2563eb;
+  font-weight: bold;
+  cursor: pointer;
 }

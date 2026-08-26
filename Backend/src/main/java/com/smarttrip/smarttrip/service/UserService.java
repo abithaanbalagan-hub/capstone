@@ -16,4 +16,15 @@ public class UserService {
     public User saveUser(User user) {
         return userRepository.save(user);
     }
+
+    public User loginUser(String email, String password) {
+        User user = userRepository.findByEmail(email)
+                .orElse(null);
+
+        if (user != null && user.getPassword().equals(password)) {
+            return user;
+        }
+
+        return null;
+    }
 }
