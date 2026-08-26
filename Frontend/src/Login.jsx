@@ -1,6 +1,6 @@
 import { useState } from 'react'
 
-function Login({ onRegister }) {
+function Login({ onRegister, onLoginSuccess }) {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [message, setMessage] = useState('')
@@ -30,6 +30,8 @@ function Login({ onRegister }) {
 
         setEmail('')
         setPassword('')
+
+        onLoginSuccess()
       } else {
         const errorText = await response.text()
 
