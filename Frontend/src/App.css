@@ -1,502 +1,365 @@
-* {
-  box-sizing: border-box;
-}
-
-body {
-  margin: 0;
-  font-family: Arial, sans-serif;
-  background: #f5f7fb;
-  color: #172033;
-}
-
-#root {
-  min-height: 100vh;
-}
-
-/* =========================
-   HOME PAGE
-   ========================= */
-
-.app {
-  min-height: 100vh;
-}
-
-/* Navbar */
-
-.navbar {
-  height: 70px;
-  padding: 0 8%;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  background: white;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-}
-
-.navbar h2 {
-  margin: 0;
-  color: #2563eb;
-}
-
-.nav-links {
-  display: flex;
-  align-items: center;
-  gap: 28px;
-}
-
-.nav-links a {
-  text-decoration: none;
-  color: #172033;
-  font-size: 15px;
-}
-
-.nav-links button {
-  border: none;
-  background: #2563eb;
-  color: white;
-  padding: 10px 20px;
-  border-radius: 8px;
-  cursor: pointer;
-}
-
-/* Hero */
-
-.hero-section {
-  min-height: 520px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  padding: 60px 20px;
-  background: linear-gradient(135deg, #eaf2ff, #ffffff);
-}
-
-.hero-content {
-  max-width: 750px;
-}
-
-.welcome {
-  color: #2563eb;
-  font-size: 14px;
-  font-weight: bold;
-  letter-spacing: 2px;
-}
-
-.hero-content h1 {
-  font-size: 58px;
-  line-height: 1.1;
-  margin: 20px 0;
-}
-
-.description {
-  max-width: 620px;
-  margin: 0 auto 30px;
-  font-size: 18px;
-  line-height: 1.6;
-  color: #5b6475;
-}
-
-.hero-buttons {
-  display: flex;
-  justify-content: center;
-  gap: 15px;
-}
-
-.primary-btn,
-.secondary-btn {
-  padding: 14px 24px;
-  border-radius: 8px;
-  font-size: 15px;
-  cursor: pointer;
-}
-
-.primary-btn {
-  border: none;
-  background: #2563eb;
-  color: white;
-}
-
-.secondary-btn {
-  border: 1px solid #2563eb;
-  background: white;
-  color: #2563eb;
-}
-
-/* Features */
-
-.features {
-  display: flex;
-  justify-content: center;
-  gap: 25px;
-  padding: 50px 8%;
-  background: white;
-}
-
-.feature-card {
-  width: 280px;
-  padding: 25px;
-  border-radius: 12px;
-  background: #f8faff;
-  text-align: center;
-}
-
-.feature-card h3 {
-  margin-top: 0;
-}
-
-.feature-card p {
-  color: #667085;
-  line-height: 1.5;
-}
-
-
-/* =========================
-   LOGIN PAGE
-   ========================= */
-
-.login-page {
-  min-height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 20px;
-  background: linear-gradient(135deg, #eaf2ff, #ffffff);
-}
-
-.login-card {
-  width: 400px;
-  max-width: 100%;
-  padding: 40px;
-  background: white;
-  border-radius: 16px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-}
-
-.login-card h1 {
-  margin: 0 0 10px;
-  text-align: center;
-  font-size: 32px;
-}
-
-.login-card > p {
-  text-align: center;
-  color: #667085;
-  margin: 0 0 30px;
-  line-height: 1.5;
-}
-
-.login-card form {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-
-.login-card label {
-  font-weight: bold;
-  font-size: 14px;
-  margin-top: 5px;
-}
-
-.login-card input {
-  width: 100%;
-  padding: 13px;
-  border: 1px solid #d0d5dd;
-  border-radius: 8px;
-  font-size: 15px;
-  outline: none;
-}
-
-.login-card input:focus {
-  border-color: #2563eb;
-}
-
-.login-card button {
-  margin-top: 10px;
-  padding: 13px;
-  border: none;
-  border-radius: 8px;
-  background: #2563eb;
-  color: white;
-  font-size: 16px;
-  cursor: pointer;
-}
-
-.login-card button:hover {
-  background: #1d4ed8;
-}
-
-.register-text {
-  margin-top: 25px !important;
-}
-
-.register-text span {
-  color: #2563eb;
-  font-weight: bold;
-  cursor: pointer;
-}
-
-
-/* =========================
-   DASHBOARD
-   ========================= */
-
-.dashboard-page {
-  min-height: 100vh;
-  background: linear-gradient(135deg, #eef4ff, #f8fbff);
-}
-
-.dashboard-nav {
-  height: 72px;
-  padding: 0 7%;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  background: white;
-  border-bottom: 1px solid #e5e7eb;
-  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.05);
-}
-
-.dashboard-nav h2 {
-  margin: 0;
-  color: #2563eb;
-  font-size: 22px;
-}
-
-.dashboard-nav button {
-  border: none;
-  background: #2563eb;
-  color: white;
-  padding: 10px 20px;
-  border-radius: 8px;
-  font-size: 14px;
-  cursor: pointer;
-  transition: 0.2s;
-}
-
-.dashboard-nav button:hover {
-  background: #1d4ed8;
-}
-
-.dashboard-content {
-  max-width: 1100px;
-  margin: 0 auto;
-  padding: 70px 25px;
-  text-align: center;
-}
-
-.dashboard-content h1 {
-  margin: 0;
-  font-size: 48px;
-  line-height: 1.15;
-  color: #111827;
-}
-
-.dashboard-content > p {
-  margin: 18px auto 45px;
-  max-width: 650px;
-  font-size: 18px;
-  line-height: 1.6;
-  color: #667085;
-}
-
-.dashboard-cards {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 25px;
-}
-
-.dashboard-card {
-  padding: 30px 25px;
-  background: white;
-  border: 1px solid #e5e7eb;
-  border-radius: 18px;
-  box-shadow: 0 8px 25px rgba(15, 23, 42, 0.07);
-  transition: transform 0.2s, box-shadow 0.2s;
-}
-
-.dashboard-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 15px 35px rgba(15, 23, 42, 0.12);
-}
-
-.dashboard-card h2 {
-  margin-top: 0;
-  font-size: 24px;
-  color: #172033;
-}
-
-.dashboard-card p {
-  min-height: 72px;
-  color: #667085;
-  line-height: 1.6;
-  font-size: 15px;
-}
-
-.dashboard-card button {
-  margin-top: 15px;
-  border: none;
-  background: #2563eb;
-  color: white;
-  padding: 11px 22px;
-  border-radius: 8px;
-  font-size: 14px;
-  cursor: pointer;
-  transition: 0.2s;
-}
-
-.dashboard-card button:hover {
-  background: #1d4ed8;
-}
-
-
-/* =========================
-   PLAN TRIP PAGE
-   ========================= */
-
-.trip-page {
-  min-height: 100vh;
-  background: linear-gradient(135deg, #eef4ff, #f8fbff);
-}
-
-.trip-content {
-  display: flex;
-  justify-content: center;
-  padding: 55px 20px;
-}
-
-.trip-card {
-  width: 650px;
-  max-width: 100%;
-  padding: 40px;
-  background: white;
-  border-radius: 20px;
-  border: 1px solid #e5e7eb;
-  box-shadow: 0 12px 35px rgba(15, 23, 42, 0.08);
-}
-
-.trip-card h1 {
-  margin: 0 0 10px;
-  text-align: center;
-  font-size: 36px;
-  color: #111827;
-}
-
-.trip-card > p {
-  margin: 0 0 30px;
-  text-align: center;
-  color: #667085;
-  line-height: 1.5;
-}
-
-.trip-card form {
-  display: flex;
-  flex-direction: column;
-  gap: 9px;
-}
-
-.trip-card label {
-  margin-top: 8px;
-  font-size: 14px;
-  font-weight: bold;
-  color: #344054;
-}
-
-.trip-card input {
-  width: 100%;
-  padding: 13px 14px;
-  border: 1px solid #d0d5dd;
-  border-radius: 9px;
-  font-size: 15px;
-  color: #172033;
-  background: white;
-  outline: none;
-  transition: 0.2s;
-}
-
-.trip-card input:focus {
-  border-color: #2563eb;
-  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
-}
-
-.trip-card form button {
-  margin-top: 20px;
-  padding: 14px;
-  border: none;
-  border-radius: 9px;
-  background: #2563eb;
-  color: white;
-  font-size: 16px;
-  font-weight: bold;
-  cursor: pointer;
-  transition: 0.2s;
-}
-
-.trip-card form button:hover {
-  background: #1d4ed8;
-  transform: translateY(-1px);
-}
-
-.trip-success {
-  margin-top: 25px !important;
-  padding: 14px;
-  border-radius: 9px;
-  background: #ecfdf3;
-  color: #027a48;
-  text-align: center;
-  font-weight: bold;
-}
-
-
-/* =========================
-   RESPONSIVE
-   ========================= */
-
-@media (max-width: 800px) {
-
-  .dashboard-content h1 {
-    font-size: 38px;
+import { useState } from 'react'
+
+import './App.css'
+
+import Login from './Login'
+import Register from './Register'
+
+
+function TripPlanner({ onBack }) {
+
+  const [destination, setDestination] = useState('')
+  const [startDate, setStartDate] = useState('')
+  const [endDate, setEndDate] = useState('')
+  const [budget, setBudget] = useState('')
+  const [travelers, setTravelers] = useState('1')
+
+  const [message, setMessage] = useState('')
+  const [error, setError] = useState('')
+
+
+  const handleTripSubmit = (e) => {
+
+    e.preventDefault()
+
+    setMessage('')
+    setError('')
+
+
+    // Destination validation
+    if (!destination.trim()) {
+      setError('Please enter your destination.')
+      return
+    }
+
+
+    // Start date validation
+    if (!startDate) {
+      setError('Please select a start date.')
+      return
+    }
+
+
+    // End date validation
+    if (!endDate) {
+      setError('Please select an end date.')
+      return
+    }
+
+
+    // Date validation
+    if (endDate < startDate) {
+      setError('End date cannot be before the start date.')
+      return
+    }
+
+
+    // Budget validation
+    if (!budget || Number(budget) <= 0) {
+      setError('Budget must be greater than 0.')
+      return
+    }
+
+
+    // Travelers validation
+    if (!travelers || Number(travelers) < 1) {
+      setError('Number of travelers must be at least 1.')
+      return
+    }
+
+
+    // Success
+    setMessage(
+      `Trip planned successfully for ${destination}!`
+    )
+
   }
 
-  .dashboard-cards {
-    grid-template-columns: 1fr;
-  }
 
-  .dashboard-card p {
-    min-height: auto;
-  }
+  return (
 
-  .trip-card {
-    padding: 28px 22px;
-  }
+    <div className="trip-page">
 
-  .trip-card h1 {
-    font-size: 30px;
-  }
+      <nav className="dashboard-nav">
+
+        <h2>SmartTrip Planner</h2>
+
+        <button onClick={onBack}>
+          Back to Dashboard
+        </button>
+
+      </nav>
+
+
+      <main className="trip-content">
+
+        <div className="trip-card">
+
+          <h1>Plan Your Trip ✈️</h1>
+
+          <p>
+            Enter your trip details to start planning your adventure.
+          </p>
+
+
+          <form onSubmit={handleTripSubmit}>
+
+            {/* Destination */}
+
+            <label>
+              Destination
+            </label>
+
+            <input
+              type="text"
+              placeholder="Example: Paris, France"
+              value={destination}
+              onChange={(e) => setDestination(e.target.value)}
+            />
+
+
+            {/* Start Date */}
+
+            <label>
+              Start Date
+            </label>
+
+            <input
+              type="date"
+              value={startDate}
+              onChange={(e) => setStartDate(e.target.value)}
+            />
+
+
+            {/* End Date */}
+
+            <label>
+              End Date
+            </label>
+
+            <input
+              type="date"
+              value={endDate}
+              onChange={(e) => setEndDate(e.target.value)}
+            />
+
+
+            {/* Budget */}
+
+            <label>
+              Budget
+            </label>
+
+            <input
+              type="number"
+              placeholder="Enter your budget"
+              value={budget}
+              onChange={(e) => setBudget(e.target.value)}
+              min="1"
+            />
+
+
+            {/* Travelers */}
+
+            <label>
+              Number of Travelers
+            </label>
+
+            <input
+              type="number"
+              value={travelers}
+              onChange={(e) => setTravelers(e.target.value)}
+              min="1"
+            />
+
+
+            <button type="submit">
+              Generate Trip Plan
+            </button>
+
+          </form>
+
+
+          {/* Error message */}
+
+          {error && (
+            <p className="trip-error">
+              {error}
+            </p>
+          )}
+
+
+          {/* Success message */}
+
+          {message && (
+            <p className="trip-success">
+              {message}
+            </p>
+          )}
+
+        </div>
+
+      </main>
+
+    </div>
+
+  )
 }
 
-@media (max-width: 500px) {
 
-  .dashboard-nav {
-    padding: 0 20px;
-  }
 
-  .dashboard-nav h2 {
-    font-size: 18px;
-  }
+function Dashboard({ onLogout, onPlanTrip }) {
 
-  .dashboard-nav button {
-    padding: 8px 13px;
-  }
+  return (
 
-  .dashboard-content {
-    padding: 45px 18px;
-  }
+    <div className="dashboard-page">
 
-  .dashboard-content h1 {
-    font-size: 32px;
-  }
+      <nav className="dashboard-nav">
 
-  .trip-content {
-    padding: 30px 15px;
-  }
+        <h2>
+          SmartTrip Planner
+        </h2>
+
+        <button onClick={onLogout}>
+          Logout
+        </button>
+
+      </nav>
+
+
+      <main className="dashboard-content">
+
+        <h1>
+          Plan Your Next Adventure ✈️
+        </h1>
+
+        <p>
+          Discover places, plan trips and create unforgettable journeys.
+        </p>
+
+
+        <div className="dashboard-cards">
+
+
+          {/* Plan Trip */}
+
+          <div className="dashboard-card">
+
+            <h2>
+              🌍 Plan a Trip
+            </h2>
+
+            <p>
+              Create a personalized travel plan based on your destination,
+              dates and budget.
+            </p>
+
+            <button onClick={onPlanTrip}>
+              Plan a Trip
+            </button>
+
+          </div>
+
+
+          {/* Explore */}
+
+          <div className="dashboard-card">
+
+            <h2>
+              🗺️ Explore Destinations
+            </h2>
+
+            <p>
+              Find interesting destinations and discover new places to visit.
+            </p>
+
+            <button>
+              Explore
+            </button>
+
+          </div>
+
+
+          {/* My Trips */}
+
+          <div className="dashboard-card">
+
+            <h2>
+              🎒 My Trips
+            </h2>
+
+            <p>
+              View and manage your planned trips in one place.
+            </p>
+
+            <button>
+              My Trips
+            </button>
+
+          </div>
+
+
+        </div>
+
+      </main>
+
+    </div>
+
+  )
 }
+
+
+
+function App() {
+
+  const [page, setPage] = useState('login')
+
+
+  return (
+
+    <>
+
+      {page === 'login' && (
+
+        <Login
+          onRegister={() => setPage('register')}
+          onLoginSuccess={() => setPage('dashboard')}
+        />
+
+      )}
+
+
+      {page === 'register' && (
+
+        <Register
+          onLogin={() => setPage('login')}
+        />
+
+      )}
+
+
+      {page === 'dashboard' && (
+
+        <Dashboard
+          onLogout={() => setPage('login')}
+          onPlanTrip={() => setPage('trip')}
+        />
+
+      )}
+
+
+      {page === 'trip' && (
+
+        <TripPlanner
+          onBack={() => setPage('dashboard')}
+        />
+
+      )}
+
+    </>
+
+  )
+}
+
+
+export default App
