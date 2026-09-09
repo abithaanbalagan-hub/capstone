@@ -5,6 +5,8 @@ import com.smarttrip.smarttrip.service.TripService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/trips")
 @CrossOrigin(origins = "http://localhost:5173")
@@ -20,5 +22,10 @@ public class TripController {
     public ResponseEntity<Trip> createTrip(@RequestBody Trip trip) {
         Trip savedTrip = tripService.saveTrip(trip);
         return ResponseEntity.ok(savedTrip);
+    }
+
+    @GetMapping
+    public ResponseEntity<List<Trip>> getAllTrips() {
+        return ResponseEntity.ok(tripService.getAllTrips());
     }
 }

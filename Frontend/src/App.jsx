@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import './App.css'
 import Login from './Login'
 import Register from './Register'
@@ -51,8 +51,8 @@ function TripPlanner({ onBack }) {
 
     const tripData = {
       destination: destination.trim(),
-      startDate: startDate,
-      endDate: endDate,
+      startDate,
+      endDate,
       budget: Number(budget),
       travelers: Number(travelers)
     }
@@ -103,14 +103,10 @@ function TripPlanner({ onBack }) {
       <main className="trip-content">
         <div className="trip-card">
           <h1>Plan Your Trip ✈️</h1>
-
-          <p>
-            Enter your trip details to start planning your adventure.
-          </p>
+          <p>Enter your trip details to start planning your adventure.</p>
 
           <form onSubmit={handleTripSubmit}>
             <label>Destination</label>
-
             <input
               type="text"
               placeholder="Example: Paris, France"
@@ -119,7 +115,6 @@ function TripPlanner({ onBack }) {
             />
 
             <label>Start Date</label>
-
             <input
               type="date"
               value={startDate}
@@ -127,7 +122,6 @@ function TripPlanner({ onBack }) {
             />
 
             <label>End Date</label>
-
             <input
               type="date"
               value={endDate}
@@ -135,7 +129,6 @@ function TripPlanner({ onBack }) {
             />
 
             <label>Budget</label>
-
             <input
               type="number"
               placeholder="Enter your budget"
@@ -145,7 +138,6 @@ function TripPlanner({ onBack }) {
             />
 
             <label>Number of Travelers</label>
-
             <input
               type="number"
               value={travelers}
@@ -158,37 +150,102 @@ function TripPlanner({ onBack }) {
             </button>
           </form>
 
-          {error && (
-            <p className="trip-error">
-              {error}
-            </p>
-          )}
-
-          {message && (
-            <p className="trip-success">
-              {message}
-            </p>
-          )}
+          {error && <p className="trip-error">{error}</p>}
+          {message && <p className="trip-success">{message}</p>}
         </div>
       </main>
     </div>
   )
 }
 
-function Dashboard({ onLogout, onPlanTrip }) {
+function MyTrips({ onBack }) {
+  const [trips, setTrips] = useState([])
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState('')
+
+  useEffect(() => {
+    const fetchTrips = async () => {
+      try {
+        const response = await fetch('http://localhost:8080/api/trips')
+
+        if (!response.ok) {
+          throw new Error('Failed to fetch trips')
+        }
+
+        const data = await response.json()
+        setTrips(data)
+      } catch (err) {
+        console.error('My Trips error:', err)
+        setError(
+          'Unable to load trips. Please make sure the backend is running.'
+        )
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    fetchTrips()
+  }, [])
+
   return (
     <div className="dashboard-page">
       <nav className="dashboard-nav">
         <h2>SmartTrip Planner</h2>
+        <button onClick={onBack}>Back to Dashboard</button>
+      </nav>
 
-        <button onClick={onLogout}>
-          Logout
-        </button>
+      <main className="dashboard-content">
+        <h1>🎒 My Trips</h1>
+        <p>View your planned trips in one place.</p>
+
+        {loading && <p>Loading your trips...</p>}
+
+        {error && <p className="trip-error">{error}</p>}
+
+        {!loading && !error && trips.length === 0 && (
+          <p>You haven't planned any trips yet.</p>
+        )}
+
+        {!loading && !error && trips.length > 0 && (
+          <div className="dashboard-cards">
+            {trips.map((trip) => (
+              <div className="dashboard-card" key={trip.id}>
+                <h2>✈️ {trip.destination}</h2>
+
+                <p>
+                  <strong>Start Date:</strong> {trip.startDate}
+                </p>
+
+                <p>
+                  <strong>End Date:</strong> {trip.endDate}
+                </p>
+
+                <p>
+                  <strong>Budget:</strong> {trip.budget}
+                </p>
+
+                <p>
+                  <strong>Travelers:</strong> {trip.travelers}
+                </p>
+              </div>
+            ))}
+          </div>
+        )}
+      </main>
+    </div>
+  )
+}
+
+function Dashboard({ onLogout, onPlanTrip, onMyTrips }) {
+  return (
+    <div className="dashboard-page">
+      <nav className="dashboard-nav">
+        <h2>SmartTrip Planner</h2>
+        <button onClick={onLogout}>Logout</button>
       </nav>
 
       <main className="dashboard-content">
         <h1>Plan Your Next Adventure ✈️</h1>
-
         <p>
           Discover places, plan trips and create unforgettable journeys.
         </p>
@@ -196,40 +253,27 @@ function Dashboard({ onLogout, onPlanTrip }) {
         <div className="dashboard-cards">
           <div className="dashboard-card">
             <h2>🌍 Plan a Trip</h2>
-
             <p>
-              Create a personalized travel plan based on your
-              destination, dates and budget.
+              Create a personalized travel plan based on your destination,
+              dates and budget.
             </p>
-
-            <button onClick={onPlanTrip}>
-              Plan a Trip
-            </button>
+            <button onClick={onPlanTrip}>Plan a Trip</button>
           </div>
 
           <div className="dashboard-card">
             <h2>🗺️ Explore Destinations</h2>
-
             <p>
-              Find interesting destinations and discover new places
-              to visit.
+              Find interesting destinations and discover new places to visit.
             </p>
-
-            <button>
-              Explore
-            </button>
+            <button>Explore</button>
           </div>
 
           <div className="dashboard-card">
             <h2>🎒 My Trips</h2>
-
             <p>
               View and manage your planned trips in one place.
             </p>
-
-            <button>
-              My Trips
-            </button>
+            <button onClick={onMyTrips}>My Trips</button>
           </div>
         </div>
       </main>
@@ -250,22 +294,23 @@ function App() {
       )}
 
       {page === 'register' && (
-        <Register
-          onLogin={() => setPage('login')}
-        />
+        <Register onLogin={() => setPage('login')} />
       )}
 
       {page === 'dashboard' && (
         <Dashboard
           onLogout={() => setPage('login')}
           onPlanTrip={() => setPage('trip')}
+          onMyTrips={() => setPage('myTrips')}
         />
       )}
 
       {page === 'trip' && (
-        <TripPlanner
-          onBack={() => setPage('dashboard')}
-        />
+        <TripPlanner onBack={() => setPage('dashboard')} />
+      )}
+
+      {page === 'myTrips' && (
+        <MyTrips onBack={() => setPage('dashboard')} />
       )}
     </>
   )
