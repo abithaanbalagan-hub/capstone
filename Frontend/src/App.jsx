@@ -103,10 +103,14 @@ function TripPlanner({ onBack }) {
       <main className="trip-content">
         <div className="trip-card">
           <h1>Plan Your Trip ✈️</h1>
-          <p>Enter your trip details to start planning your adventure.</p>
+
+          <p>
+            Enter your trip details to start planning your adventure.
+          </p>
 
           <form onSubmit={handleTripSubmit}>
             <label>Destination</label>
+
             <input
               type="text"
               placeholder="Example: Paris, France"
@@ -115,6 +119,7 @@ function TripPlanner({ onBack }) {
             />
 
             <label>Start Date</label>
+
             <input
               type="date"
               value={startDate}
@@ -122,6 +127,7 @@ function TripPlanner({ onBack }) {
             />
 
             <label>End Date</label>
+
             <input
               type="date"
               value={endDate}
@@ -129,6 +135,7 @@ function TripPlanner({ onBack }) {
             />
 
             <label>Budget</label>
+
             <input
               type="number"
               placeholder="Enter your budget"
@@ -138,6 +145,7 @@ function TripPlanner({ onBack }) {
             />
 
             <label>Number of Travelers</label>
+
             <input
               type="number"
               value={travelers}
@@ -150,8 +158,17 @@ function TripPlanner({ onBack }) {
             </button>
           </form>
 
-          {error && <p className="trip-error">{error}</p>}
-          {message && <p className="trip-success">{message}</p>}
+          {error && (
+            <p className="trip-error">
+              {error}
+            </p>
+          )}
+
+          {message && (
+            <p className="trip-success">
+              {message}
+            </p>
+          )}
         </div>
       </main>
     </div>
@@ -176,6 +193,7 @@ function MyTrips({ onBack }) {
         setTrips(data)
       } catch (err) {
         console.error('My Trips error:', err)
+
         setError(
           'Unable to load trips. Please make sure the backend is running.'
         )
@@ -191,41 +209,62 @@ function MyTrips({ onBack }) {
     <div className="dashboard-page">
       <nav className="dashboard-nav">
         <h2>SmartTrip Planner</h2>
-        <button onClick={onBack}>Back to Dashboard</button>
+
+        <button onClick={onBack}>
+          Back to Dashboard
+        </button>
       </nav>
 
       <main className="dashboard-content">
         <h1>🎒 My Trips</h1>
-        <p>View your planned trips in one place.</p>
 
-        {loading && <p>Loading your trips...</p>}
+        <p>
+          View your planned trips in one place.
+        </p>
 
-        {error && <p className="trip-error">{error}</p>}
+        {loading && (
+          <p>Loading your trips...</p>
+        )}
+
+        {error && (
+          <p className="trip-error">
+            {error}
+          </p>
+        )}
 
         {!loading && !error && trips.length === 0 && (
-          <p>You haven't planned any trips yet.</p>
+          <p>
+            You haven't planned any trips yet.
+          </p>
         )}
 
         {!loading && !error && trips.length > 0 && (
           <div className="dashboard-cards">
             {trips.map((trip) => (
-              <div className="dashboard-card" key={trip.id}>
+              <div
+                className="dashboard-card"
+                key={trip.id}
+              >
                 <h2>✈️ {trip.destination}</h2>
 
                 <p>
-                  <strong>Start Date:</strong> {trip.startDate}
+                  <strong>Start Date:</strong>{' '}
+                  {trip.startDate}
                 </p>
 
                 <p>
-                  <strong>End Date:</strong> {trip.endDate}
+                  <strong>End Date:</strong>{' '}
+                  {trip.endDate}
                 </p>
 
                 <p>
-                  <strong>Budget:</strong> {trip.budget}
+                  <strong>Budget:</strong>{' '}
+                  {trip.budget}
                 </p>
 
                 <p>
-                  <strong>Travelers:</strong> {trip.travelers}
+                  <strong>Travelers:</strong>{' '}
+                  {trip.travelers}
                 </p>
               </div>
             ))}
@@ -236,16 +275,89 @@ function MyTrips({ onBack }) {
   )
 }
 
-function Dashboard({ onLogout, onPlanTrip, onMyTrips }) {
+function ExploreDestinations({ onBack }) {
+  const destinations = [
+    {
+      name: 'Paris, France',
+      description:
+        'Explore the Eiffel Tower, museums and beautiful streets.'
+    },
+    {
+      name: 'Tokyo, Japan',
+      description:
+        'Discover modern city life, temples and Japanese culture.'
+    },
+    {
+      name: 'Dubai, UAE',
+      description:
+        'Enjoy modern attractions, shopping and desert adventures.'
+    },
+    {
+      name: 'Rome, Italy',
+      description:
+        'Experience ancient history, famous landmarks and Italian food.'
+    }
+  ]
+
   return (
     <div className="dashboard-page">
       <nav className="dashboard-nav">
         <h2>SmartTrip Planner</h2>
-        <button onClick={onLogout}>Logout</button>
+
+        <button onClick={onBack}>
+          Back to Dashboard
+        </button>
+      </nav>
+
+      <main className="dashboard-content">
+        <h1>🗺️ Explore Destinations</h1>
+
+        <p>
+          Discover interesting places for your next adventure.
+        </p>
+
+        <div className="dashboard-cards">
+          {destinations.map((destination) => (
+            <div
+              className="dashboard-card"
+              key={destination.name}
+            >
+              <h2>📍 {destination.name}</h2>
+
+              <p>
+                {destination.description}
+              </p>
+
+              <button>
+                Explore
+              </button>
+            </div>
+          ))}
+        </div>
+      </main>
+    </div>
+  )
+}
+
+function Dashboard({
+  onLogout,
+  onPlanTrip,
+  onMyTrips,
+  onExplore
+}) {
+  return (
+    <div className="dashboard-page">
+      <nav className="dashboard-nav">
+        <h2>SmartTrip Planner</h2>
+
+        <button onClick={onLogout}>
+          Logout
+        </button>
       </nav>
 
       <main className="dashboard-content">
         <h1>Plan Your Next Adventure ✈️</h1>
+
         <p>
           Discover places, plan trips and create unforgettable journeys.
         </p>
@@ -253,27 +365,40 @@ function Dashboard({ onLogout, onPlanTrip, onMyTrips }) {
         <div className="dashboard-cards">
           <div className="dashboard-card">
             <h2>🌍 Plan a Trip</h2>
+
             <p>
-              Create a personalized travel plan based on your destination,
-              dates and budget.
+              Create a personalized travel plan based on your
+              destination, dates and budget.
             </p>
-            <button onClick={onPlanTrip}>Plan a Trip</button>
+
+            <button onClick={onPlanTrip}>
+              Plan a Trip
+            </button>
           </div>
 
           <div className="dashboard-card">
             <h2>🗺️ Explore Destinations</h2>
+
             <p>
-              Find interesting destinations and discover new places to visit.
+              Find interesting destinations and discover new places
+              to visit.
             </p>
-            <button>Explore</button>
+
+            <button onClick={onExplore}>
+              Explore
+            </button>
           </div>
 
           <div className="dashboard-card">
             <h2>🎒 My Trips</h2>
+
             <p>
               View and manage your planned trips in one place.
             </p>
-            <button onClick={onMyTrips}>My Trips</button>
+
+            <button onClick={onMyTrips}>
+              My Trips
+            </button>
           </div>
         </div>
       </main>
@@ -294,7 +419,9 @@ function App() {
       )}
 
       {page === 'register' && (
-        <Register onLogin={() => setPage('login')} />
+        <Register
+          onLogin={() => setPage('login')}
+        />
       )}
 
       {page === 'dashboard' && (
@@ -302,15 +429,26 @@ function App() {
           onLogout={() => setPage('login')}
           onPlanTrip={() => setPage('trip')}
           onMyTrips={() => setPage('myTrips')}
+          onExplore={() => setPage('explore')}
         />
       )}
 
       {page === 'trip' && (
-        <TripPlanner onBack={() => setPage('dashboard')} />
+        <TripPlanner
+          onBack={() => setPage('dashboard')}
+        />
       )}
 
       {page === 'myTrips' && (
-        <MyTrips onBack={() => setPage('dashboard')} />
+        <MyTrips
+          onBack={() => setPage('dashboard')}
+        />
+      )}
+
+      {page === 'explore' && (
+        <ExploreDestinations
+          onBack={() => setPage('dashboard')}
+        />
       )}
     </>
   )
