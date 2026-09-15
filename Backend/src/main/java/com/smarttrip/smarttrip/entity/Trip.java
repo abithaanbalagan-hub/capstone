@@ -20,6 +20,9 @@ public class Trip {
 
     private Integer travelers;
 
+    @Column(columnDefinition = "TEXT")
+    private String tripPlan;
+
     public Trip() {
     }
 
@@ -65,5 +68,13 @@ public class Trip {
 
     public void setTravelers(Integer travelers) {
         this.travelers = travelers;
+    }
+
+    public String getTripPlan() {
+        return tripPlan;
+    }
+
+    public void setTripPlan(String tripPlan) {
+        this.tripPlan = tripPlan;
     }
 }

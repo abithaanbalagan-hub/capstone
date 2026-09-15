@@ -103,7 +103,6 @@ function TripPlanner({ onBack }) {
       <main className="trip-content">
         <div className="trip-card">
           <h1>Plan Your Trip ✈️</h1>
-
           <p>
             Enter your trip details to start planning your adventure.
           </p>
@@ -193,7 +192,6 @@ function MyTrips({ onBack }) {
         setTrips(data)
       } catch (err) {
         console.error('My Trips error:', err)
-
         setError(
           'Unable to load trips. Please make sure the backend is running.'
         )
@@ -266,6 +264,14 @@ function MyTrips({ onBack }) {
                   <strong>Travelers:</strong>{' '}
                   {trip.travelers}
                 </p>
+
+                {trip.tripPlan && (
+                  <div className="trip-plan">
+                    <h3>🗓️ Trip Plan</h3>
+
+                    <pre>{trip.tripPlan}</pre>
+                  </div>
+                )}
               </div>
             ))}
           </div>
