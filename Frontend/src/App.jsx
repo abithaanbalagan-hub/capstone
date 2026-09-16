@@ -39,6 +39,19 @@ function TripPlanner({ onBack }) {
       return
     }
 
+    // Calculate trip duration
+    const start = new Date(startDate)
+    const end = new Date(endDate)
+
+    const numberOfDays =
+      Math.floor((end - start) / (1000 * 60 * 60 * 24)) + 1
+
+    // Maximum trip duration validation
+    if (numberOfDays > 30) {
+      setError('Trip duration cannot be more than 30 days.')
+      return
+    }
+
     if (!budget || Number(budget) <= 0) {
       setError('Budget must be greater than 0.')
       return
@@ -85,6 +98,7 @@ function TripPlanner({ onBack }) {
       setTravelers('1')
     } catch (err) {
       console.error('Trip save error:', err)
+
       setError(
         'Backend connection failed. Please make sure the backend is running.'
       )
@@ -97,12 +111,16 @@ function TripPlanner({ onBack }) {
     <div className="trip-page">
       <nav className="dashboard-nav">
         <h2>SmartTrip Planner</h2>
-        <button onClick={onBack}>Back to Dashboard</button>
+
+        <button onClick={onBack}>
+          Back to Dashboard
+        </button>
       </nav>
 
       <main className="trip-content">
         <div className="trip-card">
           <h1>Plan Your Trip ✈️</h1>
+
           <p>
             Enter your trip details to start planning your adventure.
           </p>
@@ -153,7 +171,9 @@ function TripPlanner({ onBack }) {
             />
 
             <button type="submit" disabled={loading}>
-              {loading ? 'Saving Trip...' : 'Generate Trip Plan'}
+              {loading
+                ? 'Saving Trip...'
+                : 'Generate Trip Plan'}
             </button>
           </form>
 
@@ -182,16 +202,20 @@ function MyTrips({ onBack }) {
   useEffect(() => {
     const fetchTrips = async () => {
       try {
-        const response = await fetch('http://localhost:8080/api/trips')
+        const response = await fetch(
+          'http://localhost:8080/api/trips'
+        )
 
         if (!response.ok) {
           throw new Error('Failed to fetch trips')
         }
 
         const data = await response.json()
+
         setTrips(data)
       } catch (err) {
         console.error('My Trips error:', err)
+
         setError(
           'Unable to load trips. Please make sure the backend is running.'
         )
@@ -230,52 +254,60 @@ function MyTrips({ onBack }) {
           </p>
         )}
 
-        {!loading && !error && trips.length === 0 && (
-          <p>
-            You haven't planned any trips yet.
-          </p>
-        )}
+        {!loading &&
+          !error &&
+          trips.length === 0 && (
+            <p>
+              You haven't planned any trips yet.
+            </p>
+          )}
 
-        {!loading && !error && trips.length > 0 && (
-          <div className="dashboard-cards">
-            {trips.map((trip) => (
-              <div
-                className="dashboard-card"
-                key={trip.id}
-              >
-                <h2>✈️ {trip.destination}</h2>
+        {!loading &&
+          !error &&
+          trips.length > 0 && (
+            <div className="dashboard-cards">
+              {trips.map((trip) => (
+                <div
+                  className="dashboard-card"
+                  key={trip.id}
+                >
+                  <h2>
+                    ✈️ {trip.destination}
+                  </h2>
 
-                <p>
-                  <strong>Start Date:</strong>{' '}
-                  {trip.startDate}
-                </p>
+                  <p>
+                    <strong>Start Date:</strong>{' '}
+                    {trip.startDate}
+                  </p>
 
-                <p>
-                  <strong>End Date:</strong>{' '}
-                  {trip.endDate}
-                </p>
+                  <p>
+                    <strong>End Date:</strong>{' '}
+                    {trip.endDate}
+                  </p>
 
-                <p>
-                  <strong>Budget:</strong>{' '}
-                  {trip.budget}
-                </p>
+                  <p>
+                    <strong>Budget:</strong>{' '}
+                    {trip.budget}
+                  </p>
 
-                <p>
-                  <strong>Travelers:</strong>{' '}
-                  {trip.travelers}
-                </p>
+                  <p>
+                    <strong>Travelers:</strong>{' '}
+                    {trip.travelers}
+                  </p>
 
-                {trip.tripPlan && (
-                  <div className="trip-plan">
-                    <h3>🗓️ Trip Plan</h3>
+                  {trip.tripPlan && (
+                    <div className="trip-plan">
+                      <h3>🗓️ Trip Plan</h3>
 
-                    <pre>{trip.tripPlan}</pre>
-                  </div>
-                )}
-              </div>
-            ))}
-          </div>
-        )}
+                      <pre>
+                        {trip.tripPlan}
+                      </pre>
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+          )}
       </main>
     </div>
   )
@@ -328,7 +360,9 @@ function ExploreDestinations({ onBack }) {
               className="dashboard-card"
               key={destination.name}
             >
-              <h2>📍 {destination.name}</h2>
+              <h2>
+                📍 {destination.name}
+              </h2>
 
               <p>
                 {destination.description}
@@ -362,10 +396,13 @@ function Dashboard({
       </nav>
 
       <main className="dashboard-content">
-        <h1>Plan Your Next Adventure ✈️</h1>
+        <h1>
+          Plan Your Next Adventure ✈️
+        </h1>
 
         <p>
-          Discover places, plan trips and create unforgettable journeys.
+          Discover places, plan trips and create
+          unforgettable journeys.
         </p>
 
         <div className="dashboard-cards">
@@ -373,8 +410,8 @@ function Dashboard({
             <h2>🌍 Plan a Trip</h2>
 
             <p>
-              Create a personalized travel plan based on your
-              destination, dates and budget.
+              Create a personalized travel plan based on
+              your destination, dates and budget.
             </p>
 
             <button onClick={onPlanTrip}>
@@ -386,8 +423,8 @@ function Dashboard({
             <h2>🗺️ Explore Destinations</h2>
 
             <p>
-              Find interesting destinations and discover new places
-              to visit.
+              Find interesting destinations and discover
+              new places to visit.
             </p>
 
             <button onClick={onExplore}>
@@ -399,7 +436,8 @@ function Dashboard({
             <h2>🎒 My Trips</h2>
 
             <p>
-              View and manage your planned trips in one place.
+              View and manage your planned trips in one
+              place.
             </p>
 
             <button onClick={onMyTrips}>
