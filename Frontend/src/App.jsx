@@ -39,16 +39,18 @@ function TripPlanner({ onBack }) {
       return
     }
 
-    // Calculate trip duration
     const start = new Date(startDate)
     const end = new Date(endDate)
 
     const numberOfDays =
-      Math.floor((end - start) / (1000 * 60 * 60 * 24)) + 1
+      Math.floor(
+        (end - start) / (1000 * 60 * 60 * 24)
+      ) + 1
 
-    // Maximum trip duration validation
     if (numberOfDays > 30) {
-      setError('Trip duration cannot be more than 30 days.')
+      setError(
+        'Trip duration cannot be more than 30 days.'
+      )
       return
     }
 
@@ -58,7 +60,9 @@ function TripPlanner({ onBack }) {
     }
 
     if (!travelers || Number(travelers) < 1) {
-      setError('Number of travelers must be at least 1.')
+      setError(
+        'Number of travelers must be at least 1.'
+      )
       return
     }
 
@@ -73,13 +77,16 @@ function TripPlanner({ onBack }) {
     try {
       setLoading(true)
 
-      const response = await fetch('http://localhost:8080/api/trips', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(tripData)
-      })
+      const response = await fetch(
+        'http://localhost:8080/api/trips',
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(tripData)
+        }
+      )
 
       if (!response.ok) {
         throw new Error('Failed to save trip')
@@ -109,6 +116,7 @@ function TripPlanner({ onBack }) {
 
   return (
     <div className="trip-page">
+
       <nav className="dashboard-nav">
         <h2>SmartTrip Planner</h2>
 
@@ -118,63 +126,91 @@ function TripPlanner({ onBack }) {
       </nav>
 
       <main className="trip-content">
+
         <div className="trip-card">
+
           <h1>Plan Your Trip ✈️</h1>
 
           <p>
-            Enter your trip details to start planning your adventure.
+            Enter your trip details to start planning
+            your adventure.
           </p>
 
           <form onSubmit={handleTripSubmit}>
-            <label>Destination</label>
+
+            <label>
+              Destination
+            </label>
 
             <input
               type="text"
               placeholder="Example: Paris, France"
               value={destination}
-              onChange={(e) => setDestination(e.target.value)}
+              onChange={(e) =>
+                setDestination(e.target.value)
+              }
             />
 
-            <label>Start Date</label>
+            <label>
+              Start Date
+            </label>
 
             <input
               type="date"
               value={startDate}
-              onChange={(e) => setStartDate(e.target.value)}
+              onChange={(e) =>
+                setStartDate(e.target.value)
+              }
             />
 
-            <label>End Date</label>
+            <label>
+              End Date
+            </label>
 
             <input
               type="date"
               value={endDate}
-              onChange={(e) => setEndDate(e.target.value)}
+              onChange={(e) =>
+                setEndDate(e.target.value)
+              }
             />
 
-            <label>Budget</label>
+            <label>
+              Budget
+            </label>
 
             <input
               type="number"
               placeholder="Enter your budget"
               value={budget}
-              onChange={(e) => setBudget(e.target.value)}
+              onChange={(e) =>
+                setBudget(e.target.value)
+              }
               min="1"
             />
 
-            <label>Number of Travelers</label>
+            <label>
+              Number of Travelers
+            </label>
 
             <input
               type="number"
               value={travelers}
-              onChange={(e) => setTravelers(e.target.value)}
+              onChange={(e) =>
+                setTravelers(e.target.value)
+              }
               min="1"
             />
 
-            <button type="submit" disabled={loading}>
+            <button
+              type="submit"
+              disabled={loading}
+            >
               {loading
                 ? 'Saving Trip...'
                 : 'Generate Trip Plan'}
             </button>
+
           </form>
 
           {error && (
@@ -188,8 +224,11 @@ function TripPlanner({ onBack }) {
               {message}
             </p>
           )}
+
         </div>
+
       </main>
+
     </div>
   )
 }
@@ -229,6 +268,7 @@ function MyTrips({ onBack }) {
 
   return (
     <div className="dashboard-page">
+
       <nav className="dashboard-nav">
         <h2>SmartTrip Planner</h2>
 
@@ -238,14 +278,19 @@ function MyTrips({ onBack }) {
       </nav>
 
       <main className="dashboard-content">
-        <h1>🎒 My Trips</h1>
+
+        <h1>
+          🎒 My Trips
+        </h1>
 
         <p>
           View your planned trips in one place.
         </p>
 
         {loading && (
-          <p>Loading your trips...</p>
+          <p>
+            Loading your trips...
+          </p>
         )}
 
         {error && (
@@ -265,55 +310,80 @@ function MyTrips({ onBack }) {
         {!loading &&
           !error &&
           trips.length > 0 && (
+
             <div className="dashboard-cards">
+
               {trips.map((trip) => (
+
                 <div
                   className="dashboard-card"
                   key={trip.id}
                 >
+
                   <h2>
                     ✈️ {trip.destination}
                   </h2>
 
                   <p>
-                    <strong>Start Date:</strong>{' '}
+                    <strong>
+                      Start Date:
+                    </strong>{' '}
                     {trip.startDate}
                   </p>
 
                   <p>
-                    <strong>End Date:</strong>{' '}
+                    <strong>
+                      End Date:
+                    </strong>{' '}
                     {trip.endDate}
                   </p>
 
                   <p>
-                    <strong>Budget:</strong>{' '}
+                    <strong>
+                      Budget:
+                    </strong>{' '}
                     {trip.budget}
                   </p>
 
                   <p>
-                    <strong>Travelers:</strong>{' '}
+                    <strong>
+                      Travelers:
+                    </strong>{' '}
                     {trip.travelers}
                   </p>
 
                   {trip.tripPlan && (
+
                     <div className="trip-plan">
-                      <h3>🗓️ Trip Plan</h3>
+
+                      <h3>
+                        🗓️ Trip Plan
+                      </h3>
 
                       <pre>
                         {trip.tripPlan}
                       </pre>
+
                     </div>
+
                   )}
+
                 </div>
+
               ))}
+
             </div>
+
           )}
+
       </main>
+
     </div>
   )
 }
 
 function ExploreDestinations({ onBack }) {
+
   const destinations = [
     {
       name: 'Paris, France',
@@ -339,27 +409,39 @@ function ExploreDestinations({ onBack }) {
 
   return (
     <div className="dashboard-page">
+
       <nav className="dashboard-nav">
-        <h2>SmartTrip Planner</h2>
+
+        <h2>
+          SmartTrip Planner
+        </h2>
 
         <button onClick={onBack}>
           Back to Dashboard
         </button>
+
       </nav>
 
       <main className="dashboard-content">
-        <h1>🗺️ Explore Destinations</h1>
+
+        <h1>
+          🗺️ Explore Destinations
+        </h1>
 
         <p>
-          Discover interesting places for your next adventure.
+          Discover interesting places for your
+          next adventure.
         </p>
 
         <div className="dashboard-cards">
+
           {destinations.map((destination) => (
+
             <div
               className="dashboard-card"
               key={destination.name}
             >
+
               <h2>
                 📍 {destination.name}
               </h2>
@@ -371,10 +453,15 @@ function ExploreDestinations({ onBack }) {
               <button>
                 Explore
               </button>
+
             </div>
+
           ))}
+
         </div>
+
       </main>
+
     </div>
   )
 }
@@ -387,15 +474,21 @@ function Dashboard({
 }) {
   return (
     <div className="dashboard-page">
+
       <nav className="dashboard-nav">
-        <h2>SmartTrip Planner</h2>
+
+        <h2>
+          SmartTrip Planner
+        </h2>
 
         <button onClick={onLogout}>
           Logout
         </button>
+
       </nav>
 
       <main className="dashboard-content">
+
         <h1>
           Plan Your Next Adventure ✈️
         </h1>
@@ -406,92 +499,130 @@ function Dashboard({
         </p>
 
         <div className="dashboard-cards">
+
           <div className="dashboard-card">
-            <h2>🌍 Plan a Trip</h2>
+
+            <h2>
+              🌍 Plan a Trip
+            </h2>
 
             <p>
-              Create a personalized travel plan based on
-              your destination, dates and budget.
+              Create a personalized travel plan
+              based on your destination, dates
+              and budget.
             </p>
 
             <button onClick={onPlanTrip}>
               Plan a Trip
             </button>
+
           </div>
 
           <div className="dashboard-card">
-            <h2>🗺️ Explore Destinations</h2>
+
+            <h2>
+              🗺️ Explore Destinations
+            </h2>
 
             <p>
-              Find interesting destinations and discover
-              new places to visit.
+              Find interesting destinations and
+              discover new places to visit.
             </p>
 
             <button onClick={onExplore}>
               Explore
             </button>
+
           </div>
 
           <div className="dashboard-card">
-            <h2>🎒 My Trips</h2>
+
+            <h2>
+              🎒 My Trips
+            </h2>
 
             <p>
-              View and manage your planned trips in one
-              place.
+              View and manage your planned trips
+              in one place.
             </p>
 
             <button onClick={onMyTrips}>
               My Trips
             </button>
+
           </div>
+
         </div>
+
       </main>
+
     </div>
   )
 }
 
 function App() {
+
   const [page, setPage] = useState('login')
 
   return (
     <>
       {page === 'login' && (
         <Login
-          onRegister={() => setPage('register')}
-          onLoginSuccess={() => setPage('dashboard')}
+          onRegister={() =>
+            setPage('register')
+          }
+          onLoginSuccess={() =>
+            setPage('dashboard')
+          }
         />
       )}
 
       {page === 'register' && (
         <Register
-          onLogin={() => setPage('login')}
+          onLogin={() =>
+            setPage('login')
+          }
         />
       )}
 
       {page === 'dashboard' && (
         <Dashboard
-          onLogout={() => setPage('login')}
-          onPlanTrip={() => setPage('trip')}
-          onMyTrips={() => setPage('myTrips')}
-          onExplore={() => setPage('explore')}
+          onLogout={() =>
+            setPage('login')
+          }
+          onPlanTrip={() =>
+            setPage('trip')
+          }
+          onMyTrips={() =>
+            setPage('myTrips')
+          }
+          onExplore={() =>
+            setPage('explore')
+          }
         />
       )}
 
       {page === 'trip' && (
         <TripPlanner
-          onBack={() => setPage('dashboard')}
+          onBack={() =>
+            setPage('dashboard')
+          }
         />
       )}
 
       {page === 'myTrips' && (
         <MyTrips
-          onBack={() => setPage('dashboard')}
+          onBack={() =>
+            setPage('dashboard')
+          }
         />
       )}
 
       {page === 'explore' && (
         <ExploreDestinations
-          onBack={() => setPage('dashboard')}
+          onBack={() =>
+            setPage('dashboard')
+          }
         />
       )}
     </>
