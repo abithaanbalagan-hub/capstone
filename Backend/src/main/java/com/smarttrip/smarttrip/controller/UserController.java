@@ -2,9 +2,11 @@ package com.smarttrip.smarttrip.controller;
 
 import com.smarttrip.smarttrip.entity.User;
 import com.smarttrip.smarttrip.service.UserService;
+import com.smarttrip.smarttrip.util.JwtUtil;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.Map;
 
 @RestController
@@ -13,9 +15,11 @@ import java.util.Map;
 public class UserController {
 
     private final UserService userService;
+    private final JwtUtil jwtUtil;
 
-    public UserController(UserService userService) {
+    public UserController(UserService userService, JwtUtil jwtUtil) {
         this.userService = userService;
+        this.jwtUtil = jwtUtil;
     }
 
     @PostMapping
@@ -31,7 +35,14 @@ public class UserController {
                 userService.loginUser(user.getEmail(), user.getPassword());
 
         if (loggedInUser != null) {
-            return ResponseEntity.ok(loggedInUser);
+
+            String token = jwtUtil.generateToken(loggedInUser.getEmail());
+
+            Map<String, Object> response = new HashMap<>();
+            response.put("token", token);
+            response.put("user", loggedInUser);
+
+            return ResponseEntity.ok(response);
         }
 
         return ResponseEntity
@@ -41,7 +52,8 @@ public class UserController {
 
     // Forgot Password - Send OTP
     @PostMapping("/forgot-password")
-    public ResponseEntity<?> forgotPassword(@RequestBody Map<String, String> request) {
+    public ResponseEntity<?> forgotPassword(
+            @RequestBody Map<String, String> request) {
 
         String email = request.get("email");
 
@@ -54,7 +66,9 @@ public class UserController {
         boolean sent = userService.sendPasswordResetOtp(email);
 
         if (sent) {
-            return ResponseEntity.ok("OTP sent successfully to your email");
+            return ResponseEntity.ok(
+                    "OTP sent successfully to your email"
+            );
         }
 
         return ResponseEntity
@@ -64,7 +78,8 @@ public class UserController {
 
     // Verify OTP
     @PostMapping("/verify-otp")
-    public ResponseEntity<?> verifyOtp(@RequestBody Map<String, String> request) {
+    public ResponseEntity<?> verifyOtp(
+            @RequestBody Map<String, String> request) {
 
         String email = request.get("email");
         String otp = request.get("otp");
@@ -75,10 +90,13 @@ public class UserController {
                     .body("Email and OTP are required");
         }
 
-        boolean valid = userService.verifyPasswordResetOtp(email, otp);
+        boolean valid =
+                userService.verifyPasswordResetOtp(email, otp);
 
         if (valid) {
-            return ResponseEntity.ok("OTP verified successfully");
+            return ResponseEntity.ok(
+                    "OTP verified successfully"
+            );
         }
 
         return ResponseEntity
@@ -88,7 +106,8 @@ public class UserController {
 
     // Reset Password
     @PostMapping("/reset-password")
-    public ResponseEntity<?> resetPassword(@RequestBody Map<String, String> request) {
+    public ResponseEntity<?> resetPassword(
+            @RequestBody Map<String, String> request) {
 
         String email = request.get("email");
         String otp = request.get("otp");
@@ -113,7 +132,9 @@ public class UserController {
         );
 
         if (reset) {
-            return ResponseEntity.ok("Password reset successfully");
+            return ResponseEntity.ok(
+                    "Password reset successfully"
+            );
         }
 
         return ResponseEntity

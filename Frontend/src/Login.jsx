@@ -34,9 +34,18 @@ function Login({ onRegister, onLoginSuccess }) {
       )
 
       if (response.ok) {
-        const user = await response.json()
+        const result = await response.json()
 
-        console.log('Logged in user:', user)
+        console.log('Login response:', result)
+
+        // Save JWT token
+        localStorage.setItem('smarttripToken', result.token)
+
+        // Save user details
+        localStorage.setItem(
+          'smarttripUser',
+          JSON.stringify(result.user)
+        )
 
         setMessage('Login successful! Welcome back.')
         setEmail('')
@@ -44,6 +53,8 @@ function Login({ onRegister, onLoginSuccess }) {
 
         onLoginSuccess()
       } else {
+        const errorMessage = await response.text()
+        console.error('LOGIN FAILED:', errorMessage)
         setMessage('Invalid email or password.')
       }
     } catch (error) {
