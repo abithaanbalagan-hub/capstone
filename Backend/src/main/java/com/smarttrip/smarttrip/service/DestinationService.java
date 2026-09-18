@@ -34,13 +34,30 @@ public class DestinationService {
         String cleanDestination = destination.trim();
 
         // -------------------------------------------------
-        // STEP 1: Try dynamic OpenStreetMap data
+        // STEP 1: Use curated attractions for known cities
+        // -------------------------------------------------
+
+        List<String> fallbackAttractions =
+                getFallbackAttractions(cleanDestination);
+
+        if (!fallbackAttractions.isEmpty()) {
+
+            System.out.println(
+                    "Using curated attractions for "
+                            + cleanDestination
+            );
+
+            return fallbackAttractions;
+        }
+
+        // -------------------------------------------------
+        // STEP 2: For unknown destinations, try OSM
         // -------------------------------------------------
 
         List<String> dynamicAttractions =
                 getDynamicAttractions(cleanDestination);
 
-        if (dynamicAttractions.size() >= 3) {
+        if (!dynamicAttractions.isEmpty()) {
 
             System.out.println(
                     "Using dynamic attractions for "
@@ -51,33 +68,16 @@ public class DestinationService {
         }
 
         // -------------------------------------------------
-        // STEP 2: If API fails, use curated popular places
-        // -------------------------------------------------
-
-        List<String> fallbackAttractions =
-                getFallbackAttractions(cleanDestination);
-
-        if (!fallbackAttractions.isEmpty()) {
-
-            System.out.println(
-                    "Using fallback attractions for "
-                            + cleanDestination
-            );
-
-            return fallbackAttractions;
-        }
-
-        // -------------------------------------------------
-        // STEP 3: Unknown destination
+        // STEP 3: Unknown destination with no API result
         // TripService will create generic itinerary
         // -------------------------------------------------
 
         System.out.println(
-                "No curated attractions for "
+                "No attractions found for "
                         + cleanDestination
         );
 
-        return dynamicAttractions;
+        return new ArrayList<>();
     }
 
     // =====================================================
@@ -183,7 +183,7 @@ public class DestinationService {
             );
 
             // -------------------------------------------------
-            // STEP 2: Smaller Overpass query
+            // STEP 2: Overpass query
             // -------------------------------------------------
 
             String overpassQuery =
@@ -211,6 +211,16 @@ public class DestinationService {
                             + longitude + ");"
 
                             + "nwr[\"tourism\"=\"zoo\"]"
+                            + "(around:10000,"
+                            + latitude + ","
+                            + longitude + ");"
+
+                            + "nwr[\"tourism\"=\"theme_park\"]"
+                            + "(around:10000,"
+                            + latitude + ","
+                            + longitude + ");"
+
+                            + "nwr[\"tourism\"=\"aquarium\"]"
                             + "(around:10000,"
                             + latitude + ","
                             + longitude + ");"
@@ -407,7 +417,7 @@ public class DestinationService {
     }
 
     // =====================================================
-    // FALLBACK ATTRACTIONS
+    // CURATED ATTRACTIONS
     // =====================================================
 
     private List<String> getFallbackAttractions(
@@ -916,7 +926,10 @@ public class DestinationService {
                 || name.contains("atm")
                 || name.contains("pharmacy")
                 || name.contains("salon")
-                || name.contains("market");
+                || name.contains("market")
+                || name.contains("car shelter")
+                || name.contains("dream house")
+                || name.contains("bazaar");
     }
 
     // =====================================================

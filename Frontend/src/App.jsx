@@ -3,180 +3,121 @@ import './App.css'
 import Login from './Login'
 import Register from './Register'
 
-
 function TripPlanner({ onBack, selectedDestination = '' }) {
-
-  const [destination, setDestination] =
-    useState(selectedDestination)
-
+  const [destination, setDestination] = useState(selectedDestination)
   const [startDate, setStartDate] = useState('')
   const [endDate, setEndDate] = useState('')
   const [budget, setBudget] = useState('')
   const [travelers, setTravelers] = useState('1')
-
   const [message, setMessage] = useState('')
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
 
-
   const handleTripSubmit = async (e) => {
-
     e.preventDefault()
 
     setMessage('')
     setError('')
-
 
     if (!destination.trim()) {
       setError('Please enter your destination.')
       return
     }
 
-
     if (!startDate) {
       setError('Please select a start date.')
       return
     }
-
 
     if (!endDate) {
       setError('Please select an end date.')
       return
     }
 
-
     if (endDate < startDate) {
       setError('End date cannot be before the start date.')
       return
     }
 
-
     const start = new Date(startDate)
     const end = new Date(endDate)
 
-
     const numberOfDays =
       Math.floor(
-        (end - start) /
-        (1000 * 60 * 60 * 24)
+        (end - start) / (1000 * 60 * 60 * 24)
       ) + 1
 
-
     if (numberOfDays > 30) {
-      setError(
-        'Trip duration cannot be more than 30 days.'
-      )
+      setError('Trip duration cannot be more than 30 days.')
       return
     }
-
 
     if (!budget || Number(budget) <= 0) {
       setError('Budget must be greater than 0.')
       return
     }
 
-
     if (!travelers || Number(travelers) < 1) {
-      setError(
-        'Number of travelers must be at least 1.'
-      )
+      setError('Number of travelers must be at least 1.')
       return
     }
 
-
     const tripData = {
-
       destination: destination.trim(),
-
       startDate,
-
       endDate,
-
       budget: Number(budget),
-
       travelers: Number(travelers)
-
     }
 
-
     try {
-
       setLoading(true)
-
 
       const token =
         localStorage.getItem('smarttripToken')
 
-
       if (!token) {
-
         setError(
           'Login session expired. Please login again.'
         )
-
         return
       }
-
 
       const response = await fetch(
         'http://localhost:8080/api/trips',
         {
           method: 'POST',
-
           headers: {
-
             'Content-Type': 'application/json',
-
-            'Authorization':
-              `Bearer ${token}`
-
+            'Authorization': `Bearer ${token}`
           },
-
           body: JSON.stringify(tripData)
-
         }
       )
 
-
       if (response.status === 401) {
-
-        localStorage.removeItem(
-          'smarttripToken'
-        )
-
-        localStorage.removeItem(
-          'smarttripUser'
-        )
-
+        localStorage.removeItem('smarttripToken')
+        localStorage.removeItem('smarttripUser')
 
         setError(
           'Your login session has expired. Please login again.'
         )
-
         return
       }
 
-
       if (!response.ok) {
-
-        const errorText =
-          await response.text()
-
+        const errorText = await response.text()
 
         throw new Error(
           `Trip save failed: ${response.status} ${errorText}`
         )
       }
 
-
-      const savedTrip =
-        await response.json()
-
+      const savedTrip = await response.json()
 
       setMessage(
         `Trip planned successfully for ${savedTrip.destination}!`
       )
-
 
       setDestination('')
       setStartDate('')
@@ -184,58 +125,39 @@ function TripPlanner({ onBack, selectedDestination = '' }) {
       setBudget('')
       setTravelers('1')
 
-
     } catch (err) {
-
-      console.error(
-        'Trip save error:',
-        err
-      )
-
+      console.error('Trip save error:', err)
 
       setError(
         `Backend error: ${err.message}`
       )
 
     } finally {
-
       setLoading(false)
-
     }
-
   }
 
-
   return (
-
     <div className="trip-page">
 
       <nav className="dashboard-nav">
-
-        <h2>
-          SmartTrip Planner
-        </h2>
+        <h2>SmartTrip Planner</h2>
 
         <button onClick={onBack}>
           Back
         </button>
-
       </nav>
-
 
       <main className="trip-content">
 
         <div className="trip-card">
 
-          <h1>
-            Plan Your Trip ✈️
-          </h1>
+          <h1>Plan Your Trip ✈️</h1>
 
           <p>
             Enter your trip details to start planning
             your adventure.
           </p>
-
 
           <form onSubmit={handleTripSubmit}>
 
@@ -252,7 +174,6 @@ function TripPlanner({ onBack, selectedDestination = '' }) {
               }
             />
 
-
             <label>
               Start Date
             </label>
@@ -265,7 +186,6 @@ function TripPlanner({ onBack, selectedDestination = '' }) {
               }
             />
 
-
             <label>
               End Date
             </label>
@@ -277,7 +197,6 @@ function TripPlanner({ onBack, selectedDestination = '' }) {
                 setEndDate(e.target.value)
               }
             />
-
 
             <label>
               Budget
@@ -293,7 +212,6 @@ function TripPlanner({ onBack, selectedDestination = '' }) {
               min="1"
             />
 
-
             <label>
               Number of Travelers
             </label>
@@ -307,34 +225,27 @@ function TripPlanner({ onBack, selectedDestination = '' }) {
               min="1"
             />
 
-
             <button
               type="submit"
               disabled={loading}
             >
               {loading
-                ? 'Generating Trip Plan...'
+                ? 'Saving Trip...'
                 : 'Generate Trip Plan'}
             </button>
 
           </form>
 
-
           {error && (
-
             <p className="trip-error">
               {error}
             </p>
-
           )}
 
-
           {message && (
-
             <p className="trip-success">
               {message}
             </p>
-
           )}
 
         </div>
@@ -342,233 +253,65 @@ function TripPlanner({ onBack, selectedDestination = '' }) {
       </main>
 
     </div>
-
   )
-
 }
-
-
-
-function TripDetails({
-  trip,
-  onBack,
-  onDelete
-}) {
-
-  const [deleteLoading, setDeleteLoading] =
-    useState(false)
-
-
-  const handleDelete = async () => {
-
-    const confirmed =
-      window.confirm(
-        'Are you sure you want to delete this trip?'
-      )
-
-
-    if (!confirmed) {
-      return
-    }
-
-
-    setDeleteLoading(true)
-
-
-    await onDelete(trip.id)
-
-
-    setDeleteLoading(false)
-
-  }
-
-
-  return (
-
-    <div className="dashboard-page">
-
-      <nav className="dashboard-nav">
-
-        <h2>
-          SmartTrip Planner
-        </h2>
-
-        <button onClick={onBack}>
-          ← Back to My Trips
-        </button>
-
-      </nav>
-
-
-      <main className="dashboard-content">
-
-        <div className="dashboard-card">
-
-          <h1>
-            ✈️ {trip.destination}
-          </h1>
-
-
-          <p>
-            <strong>
-              Start Date:
-            </strong>{' '}
-            {trip.startDate}
-          </p>
-
-
-          <p>
-            <strong>
-              End Date:
-            </strong>{' '}
-            {trip.endDate}
-          </p>
-
-
-          <p>
-            <strong>
-              Budget:
-            </strong>{' '}
-            ₹{trip.budget}
-          </p>
-
-
-          <p>
-            <strong>
-              Travelers:
-            </strong>{' '}
-            {trip.travelers}
-          </p>
-
-
-          {trip.tripPlan && (
-
-            <div className="trip-plan">
-
-              <h2>
-                🗓️ Your Complete Trip Plan
-              </h2>
-
-              <pre>
-                {trip.tripPlan}
-              </pre>
-
-            </div>
-
-          )}
-
-
-          <button
-            onClick={handleDelete}
-            disabled={deleteLoading}
-          >
-            {deleteLoading
-              ? 'Deleting...'
-              : '🗑️ Delete Trip'}
-          </button>
-
-        </div>
-
-      </main>
-
-    </div>
-
-  )
-
-}
-
 
 
 function MyTrips({ onBack }) {
 
-  const [trips, setTrips] =
-    useState([])
-
-  const [loading, setLoading] =
-    useState(true)
-
-  const [error, setError] =
-    useState('')
-
-  const [deleteLoading, setDeleteLoading] =
-    useState(null)
-
-  const [selectedTrip, setSelectedTrip] =
-    useState(null)
-
+  const [trips, setTrips] = useState([])
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState('')
+  const [deleteLoading, setDeleteLoading] = useState(null)
+  const [selectedTrip, setSelectedTrip] = useState(null)
 
   const fetchTrips = async () => {
 
     try {
 
       setLoading(true)
-
       setError('')
-
 
       const token =
         localStorage.getItem('smarttripToken')
 
-
       if (!token) {
-
         setError('Please login again.')
-
         return
-
       }
-
 
       const response = await fetch(
         'http://localhost:8080/api/trips',
         {
           method: 'GET',
-
           headers: {
-
-            'Authorization':
-              `Bearer ${token}`
-
+            'Authorization': `Bearer ${token}`
           }
-
         }
       )
 
-
       if (response.status === 401) {
 
-        localStorage.removeItem(
-          'smarttripToken'
-        )
-
-        localStorage.removeItem(
-          'smarttripUser'
-        )
-
+        localStorage.removeItem('smarttripToken')
+        localStorage.removeItem('smarttripUser')
 
         throw new Error(
           'Your login session has expired.'
         )
-
       }
-
 
       if (!response.ok) {
 
         const errorText =
           await response.text()
 
-
         throw new Error(
           `Failed to fetch trips: ${response.status} ${errorText}`
         )
-
       }
-
 
       const data =
         await response.json()
-
 
       setTrips(data)
 
@@ -586,14 +329,11 @@ function MyTrips({ onBack }) {
       setLoading(false)
 
     }
-
   }
 
 
   useEffect(() => {
-
     fetchTrips()
-
   }, [])
 
 
@@ -604,71 +344,47 @@ function MyTrips({ onBack }) {
         'Are you sure you want to delete this trip?'
       )
 
-
     if (!confirmed) {
       return
     }
 
-
     try {
 
       setDeleteLoading(tripId)
-
       setError('')
-
 
       const token =
         localStorage.getItem('smarttripToken')
 
-
       if (!token) {
-
         setError('Please login again.')
-
         return
-
       }
-
 
       const response = await fetch(
         `http://localhost:8080/api/trips/${tripId}`,
         {
           method: 'DELETE',
-
           headers: {
-
-            'Authorization':
-              `Bearer ${token}`
-
+            'Authorization': `Bearer ${token}`
           }
-
         }
       )
-
 
       const responseText =
         await response.text()
 
-
       if (response.status === 401) {
 
-        localStorage.removeItem(
-          'smarttripToken'
-        )
-
-        localStorage.removeItem(
-          'smarttripUser'
-        )
-
+        localStorage.removeItem('smarttripToken')
+        localStorage.removeItem('smarttripUser')
 
         setError(
-          'Your login session has expired.'
+          'Your login session has expired. Please login again.'
         )
 
         return
-
       }
-
 
       if (response.status === 404) {
 
@@ -677,9 +393,7 @@ function MyTrips({ onBack }) {
         )
 
         return
-
       }
-
 
       if (!response.ok) {
 
@@ -688,19 +402,20 @@ function MyTrips({ onBack }) {
         )
 
         return
-
       }
-
 
       setTrips((currentTrips) =>
         currentTrips.filter(
-          (trip) =>
-            trip.id !== tripId
+          (trip) => trip.id !== tripId
         )
       )
 
-
-      setSelectedTrip(null)
+      if (
+        selectedTrip &&
+        selectedTrip.id === tripId
+      ) {
+        setSelectedTrip(null)
+      }
 
     } catch (err) {
 
@@ -708,7 +423,6 @@ function MyTrips({ onBack }) {
         'Delete trip error:',
         err
       )
-
 
       setError(
         `Delete error: ${err.message}`
@@ -719,32 +433,115 @@ function MyTrips({ onBack }) {
       setDeleteLoading(null)
 
     }
-
   }
 
 
+  /*
+   * View Trip page
+   */
   if (selectedTrip) {
 
     return (
+      <div className="dashboard-page">
 
-      <TripDetails
-        trip={selectedTrip}
+        <nav className="dashboard-nav">
 
-        onBack={() =>
-          setSelectedTrip(null)
-        }
+          <h2>
+            SmartTrip Planner
+          </h2>
 
-        onDelete={handleDeleteTrip}
+          <button
+            onClick={() =>
+              setSelectedTrip(null)
+            }
+          >
+            Back to My Trips
+          </button>
 
-      />
+        </nav>
 
+        <main className="dashboard-content">
+
+          <div className="dashboard-card">
+
+            <h1>
+              ✈️ {selectedTrip.destination}
+            </h1>
+
+            <p>
+              <strong>
+                Start Date:
+              </strong>{' '}
+              {selectedTrip.startDate}
+            </p>
+
+            <p>
+              <strong>
+                End Date:
+              </strong>{' '}
+              {selectedTrip.endDate}
+            </p>
+
+            <p>
+              <strong>
+                Budget:
+              </strong>{' '}
+              ₹{selectedTrip.budget}
+            </p>
+
+            <p>
+              <strong>
+                Travelers:
+              </strong>{' '}
+              {selectedTrip.travelers}
+            </p>
+
+            {selectedTrip.tripPlan && (
+
+              <div className="trip-plan">
+
+                <h3>
+                  🗓️ Trip Plan
+                </h3>
+
+                <pre>
+                  {selectedTrip.tripPlan}
+                </pre>
+
+              </div>
+
+            )}
+
+            <button
+              onClick={() =>
+                handleDeleteTrip(
+                  selectedTrip.id
+                )
+              }
+              disabled={
+                deleteLoading ===
+                selectedTrip.id
+              }
+            >
+              {deleteLoading ===
+              selectedTrip.id
+                ? 'Deleting...'
+                : '🗑️ Delete Trip'}
+            </button>
+
+          </div>
+
+        </main>
+
+      </div>
     )
-
   }
 
 
+  /*
+   * My Trips list page
+   */
   return (
-
     <div className="dashboard-page">
 
       <nav className="dashboard-nav">
@@ -759,7 +556,6 @@ function MyTrips({ onBack }) {
 
       </nav>
 
-
       <main className="dashboard-content">
 
         <h1>
@@ -767,10 +563,8 @@ function MyTrips({ onBack }) {
         </h1>
 
         <p>
-          View and manage your planned trips
-          in one place.
+          View your planned trips in one place.
         </p>
-
 
         {loading && (
 
@@ -780,7 +574,6 @@ function MyTrips({ onBack }) {
 
         )}
 
-
         {error && (
 
           <p className="trip-error">
@@ -788,7 +581,6 @@ function MyTrips({ onBack }) {
           </p>
 
         )}
-
 
         {!loading &&
           !error &&
@@ -799,7 +591,6 @@ function MyTrips({ onBack }) {
             </p>
 
           )}
-
 
         {!loading &&
           !error &&
@@ -818,14 +609,12 @@ function MyTrips({ onBack }) {
                     ✈️ {trip.destination}
                   </h2>
 
-
                   <p>
                     <strong>
                       Start Date:
                     </strong>{' '}
                     {trip.startDate}
                   </p>
-
 
                   <p>
                     <strong>
@@ -834,14 +623,12 @@ function MyTrips({ onBack }) {
                     {trip.endDate}
                   </p>
 
-
                   <p>
                     <strong>
                       Budget:
                     </strong>{' '}
                     ₹{trip.budget}
                   </p>
-
 
                   <p>
                     <strong>
@@ -850,13 +637,11 @@ function MyTrips({ onBack }) {
                     {trip.travelers}
                   </p>
 
-
                   <div
                     style={{
                       display: 'flex',
                       gap: '10px',
-                      marginTop: '15px',
-                      flexWrap: 'wrap'
+                      marginTop: '15px'
                     }}
                   >
 
@@ -868,7 +653,6 @@ function MyTrips({ onBack }) {
                       👁️ View Trip
                     </button>
 
-
                     <button
                       onClick={() =>
                         handleDeleteTrip(
@@ -876,7 +660,8 @@ function MyTrips({ onBack }) {
                         )
                       }
                       disabled={
-                        deleteLoading === trip.id
+                        deleteLoading ===
+                        trip.id
                       }
                     >
                       {deleteLoading === trip.id
@@ -897,11 +682,8 @@ function MyTrips({ onBack }) {
       </main>
 
     </div>
-
   )
-
 }
-
 
 
 function ExploreDestinations({
@@ -909,20 +691,14 @@ function ExploreDestinations({
   onPlanDestination
 }) {
 
-  const [
-    selectedDestination,
-    setSelectedDestination
-  ] = useState(null)
-
+  const [selectedDestination, setSelectedDestination] =
+    useState(null)
 
   const destinations = [
-
     {
       name: 'Paris, France',
-
       description:
         'Explore the Eiffel Tower, museums and beautiful streets.',
-
       attractions: [
         'Eiffel Tower',
         'Louvre Museum',
@@ -931,13 +707,10 @@ function ExploreDestinations({
       ]
     },
 
-
     {
       name: 'Tokyo, Japan',
-
       description:
         'Discover modern city life, temples and Japanese culture.',
-
       attractions: [
         'Tokyo Tower',
         'Shibuya Crossing',
@@ -946,13 +719,10 @@ function ExploreDestinations({
       ]
     },
 
-
     {
       name: 'Dubai, UAE',
-
       description:
         'Enjoy modern attractions, shopping and desert adventures.',
-
       attractions: [
         'Burj Khalifa',
         'Dubai Mall',
@@ -961,13 +731,10 @@ function ExploreDestinations({
       ]
     },
 
-
     {
       name: 'Rome, Italy',
-
       description:
         'Experience ancient history, famous landmarks and Italian food.',
-
       attractions: [
         'Colosseum',
         'Roman Forum',
@@ -975,14 +742,12 @@ function ExploreDestinations({
         'Pantheon'
       ]
     }
-
   ]
 
 
   if (selectedDestination) {
 
     return (
-
       <div className="dashboard-page">
 
         <nav className="dashboard-nav">
@@ -990,7 +755,6 @@ function ExploreDestinations({
           <h2>
             SmartTrip Planner
           </h2>
-
 
           <button
             onClick={() =>
@@ -1002,25 +766,21 @@ function ExploreDestinations({
 
         </nav>
 
-
         <main className="dashboard-content">
 
           <h1>
             📍 {selectedDestination.name}
           </h1>
 
-
           <p>
             {selectedDestination.description}
           </p>
-
 
           <div className="dashboard-card">
 
             <h2>
               ⭐ Popular Attractions
             </h2>
-
 
             <ul>
 
@@ -1035,7 +795,6 @@ function ExploreDestinations({
               )}
 
             </ul>
-
 
             <button
               onClick={() =>
@@ -1052,14 +811,11 @@ function ExploreDestinations({
         </main>
 
       </div>
-
     )
-
   }
 
 
   return (
-
     <div className="dashboard-page">
 
       <nav className="dashboard-nav">
@@ -1068,13 +824,11 @@ function ExploreDestinations({
           SmartTrip Planner
         </h2>
 
-
         <button onClick={onBack}>
           Back to Dashboard
         </button>
 
       </nav>
-
 
       <main className="dashboard-content">
 
@@ -1082,58 +836,49 @@ function ExploreDestinations({
           🗺️ Explore Destinations
         </h1>
 
-
         <p>
           Discover interesting places for your
           next adventure.
         </p>
 
-
         <div className="dashboard-cards">
 
-          {destinations.map(
-            (destination) => (
+          {destinations.map((destination) => (
 
-              <div
-                className="dashboard-card"
-                key={destination.name}
+            <div
+              className="dashboard-card"
+              key={destination.name}
+            >
+
+              <h2>
+                📍 {destination.name}
+              </h2>
+
+              <p>
+                {destination.description}
+              </p>
+
+              <button
+                onClick={() =>
+                  setSelectedDestination(
+                    destination
+                  )
+                }
               >
+                Explore
+              </button>
 
-                <h2>
-                  📍 {destination.name}
-                </h2>
+            </div>
 
-
-                <p>
-                  {destination.description}
-                </p>
-
-
-                <button
-                  onClick={() =>
-                    setSelectedDestination(
-                      destination
-                    )
-                  }
-                >
-                  Explore
-                </button>
-
-              </div>
-
-            )
-          )}
+          ))}
 
         </div>
 
       </main>
 
     </div>
-
   )
-
 }
-
 
 
 function Dashboard({
@@ -1144,7 +889,6 @@ function Dashboard({
 }) {
 
   return (
-
     <div className="dashboard-page">
 
       <nav className="dashboard-nav">
@@ -1153,13 +897,11 @@ function Dashboard({
           SmartTrip Planner
         </h2>
 
-
         <button onClick={onLogout}>
           Logout
         </button>
 
       </nav>
-
 
       <main className="dashboard-content">
 
@@ -1167,15 +909,12 @@ function Dashboard({
           Plan Your Next Adventure ✈️
         </h1>
 
-
         <p>
           Discover places, plan trips and create
           unforgettable journeys.
         </p>
 
-
         <div className="dashboard-cards">
-
 
           <div className="dashboard-card">
 
@@ -1231,17 +970,13 @@ function Dashboard({
 
           </div>
 
-
         </div>
 
       </main>
 
     </div>
-
   )
-
 }
-
 
 
 function App() {
@@ -1249,21 +984,16 @@ function App() {
   const [page, setPage] =
     useState('login')
 
-
-  const [
-    selectedDestination,
-    setSelectedDestination
-  ] = useState('')
+  const [selectedDestination, setSelectedDestination] =
+    useState('')
 
 
   return (
-
     <>
 
       {page === 'login' && (
 
         <Login
-
           onRegister={() =>
             setPage('register')
           }
@@ -1271,7 +1001,6 @@ function App() {
           onLoginSuccess={() =>
             setPage('dashboard')
           }
-
         />
 
       )}
@@ -1280,11 +1009,9 @@ function App() {
       {page === 'register' && (
 
         <Register
-
           onLogin={() =>
             setPage('login')
           }
-
         />
 
       )}
@@ -1305,23 +1032,18 @@ function App() {
             )
 
             setPage('login')
-
           }}
-
 
           onPlanTrip={() => {
 
             setSelectedDestination('')
-
             setPage('trip')
 
           }}
 
-
           onMyTrips={() =>
             setPage('myTrips')
           }
-
 
           onExplore={() =>
             setPage('explore')
@@ -1370,28 +1092,22 @@ function App() {
             setPage('dashboard')
           }
 
+          onPlanDestination={(destination) => {
 
-          onPlanDestination={
-            (destination) => {
+            setSelectedDestination(
+              destination
+            )
 
-              setSelectedDestination(
-                destination
-              )
+            setPage('trip')
 
-              setPage('trip')
-
-            }
-          }
+          }}
 
         />
 
       )}
 
     </>
-
   )
-
 }
-
 
 export default App
