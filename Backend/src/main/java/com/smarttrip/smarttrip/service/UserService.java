@@ -6,6 +6,7 @@ import com.smarttrip.smarttrip.repository.PasswordResetTokenRepository;
 import com.smarttrip.smarttrip.repository.UserRepository;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -17,6 +18,7 @@ public class UserService {
     private final UserRepository userRepository;
     private final PasswordResetTokenRepository passwordResetTokenRepository;
     private final JavaMailSender mailSender;
+    private final BCryptPasswordEncoder passwordEncoder;
 
     public UserService(
             UserRepository userRepository,
@@ -26,16 +28,27 @@ public class UserService {
         this.userRepository = userRepository;
         this.passwordResetTokenRepository = passwordResetTokenRepository;
         this.mailSender = mailSender;
+        this.passwordEncoder = new BCryptPasswordEncoder();
     }
 
     public User saveUser(User user) {
+
+        // Hash password before saving
+        if (user.getPassword() != null && !user.getPassword().isBlank()) {
+            user.setPassword(passwordEncoder.encode(user.getPassword()));
+        }
+
         return userRepository.save(user);
     }
 
     public User loginUser(String email, String password) {
+
         User user = userRepository.findByEmail(email).orElse(null);
 
-        if (user != null && user.getPassword().equals(password)) {
+        if (user != null
+                && user.getPassword() != null
+                && passwordEncoder.matches(password, user.getPassword())) {
+
             return user;
         }
 
@@ -115,7 +128,8 @@ public class UserService {
             return false;
         }
 
-        user.setPassword(newPassword);
+        // Hash new password before saving
+        user.setPassword(passwordEncoder.encode(newPassword));
         userRepository.save(user);
 
         // OTP can no longer be used after password reset
