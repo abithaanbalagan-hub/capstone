@@ -1,300 +1,1568 @@
+/* =========================================================
+   SMARTTRIP PLANNER - GLOBAL STYLES
+   ========================================================= */
+
 * {
-  margin: 0;
-  padding: 0;
   box-sizing: border-box;
 }
 
+html,
+body,
+#root {
+  margin: 0;
+  min-height: 100%;
+}
+
 body {
-  font-family: Arial, sans-serif;
-  background: #f7f9fc;
-  color: #1f2937;
+  font-family:
+    Inter,
+    ui-sans-serif,
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    sans-serif;
+
+  color: #172033;
+
+  background:
+    radial-gradient(
+      circle at top left,
+      rgba(14, 165, 233, 0.12),
+      transparent 35%
+    ),
+    radial-gradient(
+      circle at bottom right,
+      rgba(37, 99, 235, 0.12),
+      transparent 35%
+    ),
+    #f4f9fc;
 }
 
-.app {
-  min-height: 100vh;
+button,
+input {
+  font: inherit;
 }
 
-/* Navbar */
-
-.navbar {
-  height: 70px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0 7%;
-  background: white;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
-}
-
-.logo {
-  font-size: 26px;
-  font-weight: bold;
-  color: #176b87;
-}
-
-.nav-links {
-  display: flex;
-  align-items: center;
-  gap: 28px;
-}
-
-.nav-links a {
-  text-decoration: none;
-  color: #374151;
-  font-size: 15px;
-}
-
-.nav-links a:hover {
-  color: #176b87;
-}
-
-.login-btn {
-  padding: 10px 22px;
-  border: none;
-  border-radius: 6px;
-  background: #176b87;
-  color: white;
+button {
   cursor: pointer;
-  font-size: 14px;
 }
 
-/* Hero */
+button:disabled {
+  cursor: not-allowed;
+  opacity: 0.65;
+}
 
-.hero-section {
-  min-height: 580px;
+
+/* =========================================================
+   LOGIN PAGE
+   ========================================================= */
+
+.login-page {
+  min-height: 100vh;
+  padding: 28px;
+  position: relative;
+  overflow: hidden;
+
   display: flex;
   align-items: center;
-  padding: 70px 8%;
-  background: linear-gradient(135deg, #e8f6f8, #f8fbfc);
+  justify-content: center;
+
+  background:
+    radial-gradient(
+      circle at 10% 10%,
+      rgba(14, 165, 233, 0.16),
+      transparent 30%
+    ),
+    radial-gradient(
+      circle at 90% 90%,
+      rgba(37, 99, 235, 0.13),
+      transparent 32%
+    ),
+    #eef8fc;
+}
+
+.login-decoration {
+  position: absolute;
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.login-circle-one {
+  width: 330px;
+  height: 330px;
+  top: -170px;
+  left: -120px;
+  background: rgba(14, 165, 233, 0.12);
+}
+
+.login-circle-two {
+  width: 420px;
+  height: 420px;
+  bottom: -250px;
+  right: -150px;
+  background: rgba(37, 99, 235, 0.10);
+}
+
+.login-container {
+  width: 100%;
+  max-width: 1180px;
+  min-height: 690px;
+
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+
+  background: rgba(255, 255, 255, 0.94);
+
+  border-radius: 30px;
+  overflow: hidden;
+
+  box-shadow:
+    0 30px 80px rgba(15, 23, 42, 0.15),
+    0 10px 30px rgba(14, 165, 233, 0.08);
+
+  position: relative;
+  z-index: 2;
+}
+
+
+/* =========================================================
+   LOGIN HERO
+   ========================================================= */
+
+.login-hero {
+  position: relative;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 65px 60px;
+
+  background:
+    radial-gradient(
+      circle at 85% 5%,
+      rgba(255, 255, 255, 0.16),
+      transparent 25%
+    ),
+    radial-gradient(
+      circle at 10% 95%,
+      rgba(255, 255, 255, 0.10),
+      transparent 22%
+    ),
+    linear-gradient(
+      145deg,
+      #0b87ad 0%,
+      #087ea4 30%,
+      #2563eb 100%
+    );
+
+  color: white;
+}
+
+.login-hero::before {
+  content: "";
+  position: absolute;
+
+  width: 300px;
+  height: 300px;
+
+  top: -130px;
+  right: -80px;
+
+  border-radius: 50%;
+
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.login-hero::after {
+  content: "";
+  position: absolute;
+
+  width: 230px;
+  height: 230px;
+
+  bottom: -110px;
+  left: -90px;
+
+  border-radius: 50%;
+
+  background: rgba(255, 255, 255, 0.07);
 }
 
 .hero-content {
-  max-width: 700px;
+  width: 100%;
+  max-width: 500px;
+  position: relative;
+  z-index: 2;
 }
 
-.tagline {
-  color: #176b87;
-  font-size: 14px;
-  font-weight: bold;
-  letter-spacing: 2px;
-  margin-bottom: 18px;
+.brand-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+
+  padding: 10px 17px;
+
+  border-radius: 999px;
+
+  background: rgba(255, 255, 255, 0.13);
+  border: 1px solid rgba(255, 255, 255, 0.22);
+
+  color: white;
+
+  font-size: 0.95rem;
+  font-weight: 700;
+
+  margin-bottom: 34px;
+
+  backdrop-filter: blur(10px);
 }
 
 .hero-content h1 {
-  font-size: 52px;
-  line-height: 1.15;
-  margin-bottom: 25px;
-  color: #172b3a;
+  margin: 0;
+
+  font-size: clamp(3.2rem, 5vw, 5.1rem);
+  line-height: 0.98;
+
+  letter-spacing: -0.055em;
+
+  font-weight: 850;
+
+  color: #06101f;
 }
 
 .hero-content h1 span {
-  color: #176b87;
+  color: #c9f5ff;
 }
 
-.description {
-  max-width: 600px;
-  font-size: 18px;
-  line-height: 1.7;
-  color: #5b6573;
-  margin-bottom: 32px;
+.hero-content > p {
+  margin: 30px 0 34px;
+
+  max-width: 470px;
+
+  font-size: 1.05rem;
+  line-height: 1.75;
+
+  color: rgba(255, 255, 255, 0.88);
 }
 
-.hero-buttons {
+
+/* =========================================================
+   TRAVEL FEATURES
+   ========================================================= */
+
+.travel-features {
   display: flex;
-  gap: 15px;
+  flex-direction: column;
+  gap: 14px;
 }
 
-.primary-btn,
-.secondary-btn {
-  padding: 14px 28px;
-  border-radius: 7px;
-  font-size: 15px;
+.travel-feature {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+
+  padding: 16px 18px;
+
+  border-radius: 18px;
+
+  background: rgba(255, 255, 255, 0.12);
+
+  border: 1px solid rgba(255, 255, 255, 0.18);
+
+  transition:
+    transform 0.25s ease,
+    background 0.25s ease,
+    box-shadow 0.25s ease;
+}
+
+.travel-feature:hover {
+  transform: translateX(7px);
+
+  background: rgba(255, 255, 255, 0.17);
+
+  box-shadow:
+    0 12px 25px rgba(0, 0, 0, 0.08);
+}
+
+.travel-feature > span {
+  width: 54px;
+  height: 54px;
+
+  flex-shrink: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 16px;
+
+  background: rgba(255, 255, 255, 0.14);
+
+  font-size: 1.55rem;
+}
+
+.travel-feature div {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.travel-feature strong {
+  font-size: 1.05rem;
+  color: white;
+}
+
+.travel-feature small {
+  font-size: 0.87rem;
+  color: rgba(255, 255, 255, 0.75);
+}
+
+
+/* =========================================================
+   LOGIN RIGHT SECTION
+   ========================================================= */
+
+.login-section {
+  min-height: 100%;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 55px 65px;
+
+  background: rgba(255, 255, 255, 0.96);
+}
+
+.login-card {
+  width: 100%;
+  max-width: 500px;
+}
+
+.login-icon {
+  width: 66px;
+  height: 66px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 20px;
+
+  background:
+    linear-gradient(
+      135deg,
+      #e0f2fe,
+      #dbeafe
+    );
+
+  font-size: 2rem;
+
+  margin-bottom: 28px;
+
+  box-shadow:
+    0 10px 25px rgba(14, 165, 233, 0.12);
+}
+
+.login-card h2 {
+  margin: 0;
+
+  color: #172033;
+
+  font-size: clamp(2rem, 3vw, 2.65rem);
+
+  line-height: 1.15;
+
+  letter-spacing: -0.035em;
+}
+
+.login-subtitle {
+  margin: 12px 0 38px;
+
+  color: #64748b;
+
+  font-size: 1.05rem;
+}
+
+
+/* =========================================================
+   LOGIN FORM
+   ========================================================= */
+
+.login-card form {
+  display: flex;
+  flex-direction: column;
+}
+
+.login-card label {
+  margin-bottom: 9px;
+
+  color: #334155;
+
+  font-size: 0.9rem;
+  font-weight: 750;
+}
+
+.login-card input {
+  width: 100%;
+
+  padding: 16px 18px;
+
+  margin-bottom: 22px;
+
+  border: 1px solid #dbe3ec;
+  border-radius: 15px;
+
+  outline: none;
+
+  background: #fbfdff;
+
+  color: #172033;
+
+  font-size: 1rem;
+
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease,
+    background 0.2s ease;
+}
+
+.login-card input::placeholder {
+  color: #94a3b8;
+}
+
+.login-card input:focus {
+  border-color: #0e9fbe;
+
+  background: white;
+
+  box-shadow:
+    0 0 0 4px rgba(14, 159, 190, 0.10);
+}
+
+
+/* =========================================================
+   FORGOT PASSWORD
+   ========================================================= */
+
+.forgot-password {
+  display: flex;
+  justify-content: flex-end;
+
+  margin-top: -8px;
+  margin-bottom: 17px;
+}
+
+.forgot-password span {
+  color: #087ea4;
+
+  font-size: 0.86rem;
+  font-weight: 750;
+
+  cursor: pointer;
+
+  transition:
+    color 0.2s ease,
+    transform 0.2s ease;
+}
+
+.forgot-password span:hover {
+  color: #2563eb;
+
+  text-decoration: underline;
+
+  transform: translateY(-1px);
+}
+
+
+/* =========================================================
+   LOGIN BUTTON
+   ========================================================= */
+
+.login-button {
+  width: 100%;
+
+  border: none;
+  border-radius: 15px;
+
+  padding: 16px 20px;
+
+  background:
+    linear-gradient(
+      100deg,
+      #0b87ad 0%,
+      #087ea4 35%,
+      #2563eb 100%
+    );
+
+  color: white;
+
+  font-size: 1rem;
+  font-weight: 800;
+
+  box-shadow:
+    0 14px 30px rgba(37, 99, 235, 0.20);
+
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease,
+    filter 0.2s ease;
+}
+
+.login-button span {
+  margin-left: 8px;
+  font-size: 1.1rem;
+}
+
+.login-button:hover:not(:disabled) {
+  transform: translateY(-2px);
+
+  box-shadow:
+    0 18px 35px rgba(37, 99, 235, 0.27);
+
+  filter: brightness(1.03);
+}
+
+.login-button:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+
+/* =========================================================
+   LOGIN MESSAGES
+   ========================================================= */
+
+.login-message {
+  margin: 16px 0 0;
+
+  text-align: center;
+
+  color: #087ea4;
+
+  font-size: 0.88rem;
+  font-weight: 650;
+
+  line-height: 1.5;
+}
+
+
+/* =========================================================
+   LOGIN DIVIDER
+   ========================================================= */
+
+.login-divider {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+
+  margin: 30px 0 25px;
+}
+
+.login-divider span {
+  height: 1px;
+  flex: 1;
+
+  background: #e2e8f0;
+}
+
+.login-divider small {
+  color: #94a3b8;
+
+  font-size: 0.85rem;
+}
+
+
+/* =========================================================
+   REGISTER TEXT
+   ========================================================= */
+
+.register-text {
+  margin: 0;
+
+  text-align: center;
+
+  color: #64748b;
+
+  font-size: 0.92rem;
+}
+
+.register-text span {
+  color: #087ea4;
+
+  font-weight: 800;
+
   cursor: pointer;
 }
 
-.primary-btn {
-  background: #176b87;
-  color: white;
-  border: 2px solid #176b87;
+.register-text span:hover {
+  color: #2563eb;
+
+  text-decoration: underline;
 }
 
-.primary-btn:hover {
-  background: #12566d;
-}
 
-.secondary-btn {
-  background: white;
-  color: #176b87;
-  border: 2px solid #176b87;
-}
+/* =========================================================
+   FORGOT PASSWORD MODAL
+   ========================================================= */
 
-/* Features */
+.forgot-modal-overlay {
+  position: fixed;
 
-.features {
-  padding: 80px 8%;
-  text-align: center;
-  background: white;
-}
+  inset: 0;
 
-.features h2 {
-  font-size: 34px;
-  color: #172b3a;
-  margin-bottom: 12px;
-}
-
-.section-text {
-  color: #6b7280;
-  margin-bottom: 45px;
-}
-
-.feature-container {
   display: flex;
-  justify-content: center;
-  gap: 25px;
-  flex-wrap: wrap;
-}
-
-.feature-card {
-  width: 280px;
-  padding: 30px;
-  border-radius: 12px;
-  background: #f8fafc;
-  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.06);
-}
-
-.feature-card .icon {
-  font-size: 42px;
-  margin-bottom: 18px;
-}
-
-.feature-card h3 {
-  margin-bottom: 12px;
-  color: #176b87;
-}
-
-.feature-card p {
-  color: #6b7280;
-  line-height: 1.6;
-}
-
-/* Innovation */
-
-.innovation {
-  padding: 80px 8%;
-  display: flex;
-  justify-content: space-between;
   align-items: center;
-  gap: 60px;
-  background: #eef8fa;
+  justify-content: center;
+
+  padding: 20px;
+
+  background: rgba(15, 23, 42, 0.55);
+
+  backdrop-filter: blur(7px);
+
+  z-index: 9999;
 }
 
-.innovation > div:first-child {
-  max-width: 550px;
+.forgot-modal {
+  width: 100%;
+  max-width: 440px;
+
+  padding: 38px;
+
+  position: relative;
+
+  background: #ffffff;
+
+  border-radius: 25px;
+
+  box-shadow:
+    0 30px 80px rgba(15, 23, 42, 0.25);
+
+  animation: forgotModalIn 0.25s ease;
 }
 
-.innovation h2 {
-  font-size: 40px;
-  margin-bottom: 20px;
-  color: #172b3a;
+@keyframes forgotModalIn {
+
+  from {
+    opacity: 0;
+
+    transform:
+      translateY(25px)
+      scale(0.96);
+  }
+
+  to {
+    opacity: 1;
+
+    transform:
+      translateY(0)
+      scale(1);
+  }
 }
 
-.innovation h2 span {
-  color: #176b87;
-}
+.forgot-close {
+  position: absolute;
 
-.innovation p {
-  color: #5b6573;
-  line-height: 1.7;
-  margin-bottom: 25px;
-}
+  top: 16px;
+  right: 18px;
 
-/* Budget Box */
+  width: 36px;
+  height: 36px;
 
-.budget-box {
-  width: 350px;
-  padding: 30px;
-  background: white;
-  border-radius: 12px;
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
-}
-
-.budget-box h3 {
-  margin-bottom: 20px;
-  color: #172b3a;
-}
-
-.budget-row,
-.budget-total {
   display: flex;
-  justify-content: space-between;
-  padding: 12px 0;
+  align-items: center;
+  justify-content: center;
+
+  border: none;
+
+  border-radius: 50%;
+
+  background: #f1f5f9;
+
+  color: #475569;
+
+  font-size: 25px;
+
+  line-height: 1;
+
+  transition:
+    background 0.2s ease,
+    transform 0.2s ease;
 }
 
-.budget-row span {
-  color: #6b7280;
+.forgot-close:hover {
+  background: #e2e8f0;
+
+  transform: rotate(5deg);
 }
 
-.budget-total {
-  font-size: 18px;
-  font-weight: bold;
+.forgot-modal-icon {
+  width: 68px;
+  height: 68px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  margin: 0 auto 22px;
+
+  border-radius: 20px;
+
+  background:
+    linear-gradient(
+      135deg,
+      #dbeafe,
+      #cffafe
+    );
+
+  font-size: 30px;
+
+  box-shadow:
+    0 10px 25px rgba(14, 165, 233, 0.10);
 }
 
-.remaining {
-  color: #16804a !important;
-  font-weight: bold;
-  margin-top: 15px;
-}
+.forgot-modal h2 {
+  margin: 0 0 11px;
 
-/* Footer */
-
-footer {
   text-align: center;
-  padding: 35px;
-  background: #172b3a;
-  color: white;
+
+  color: #172033;
+
+  font-size: 1.75rem;
+
+  letter-spacing: -0.025em;
 }
 
-footer h3 {
-  font-size: 24px;
+.forgot-modal > p {
+  margin: 0 0 26px;
+
+  text-align: center;
+
+  color: #64748b;
+
+  font-size: 0.93rem;
+
+  line-height: 1.65;
+}
+
+.forgot-modal form {
+  display: flex;
+  flex-direction: column;
+}
+
+.forgot-modal label {
+  margin-bottom: 8px;
+
+  color: #334155;
+
+  font-size: 0.88rem;
+
+  font-weight: 750;
+}
+
+.forgot-modal input {
+  width: 100%;
+
+  padding: 14px 15px;
+
+  margin-bottom: 18px;
+
+  border: 1px solid #dbe3ec;
+
+  border-radius: 13px;
+
+  outline: none;
+
+  background: #fbfdff;
+
+  color: #172033;
+
+  font-size: 0.95rem;
+
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.forgot-modal input:focus {
+  border-color: #0891b2;
+
+  background: white;
+
+  box-shadow:
+    0 0 0 4px rgba(8, 145, 178, 0.10);
+}
+
+.forgot-modal .login-button {
+  width: 100%;
+
+  margin-top: 3px;
+}
+
+.forgot-message {
+  margin: 18px 0 0;
+
+  text-align: center;
+
+  color: #087ea4;
+
+  font-size: 0.88rem;
+
+  font-weight: 650;
+
+  line-height: 1.5;
+}
+
+.back-link {
+  display: block;
+
+  margin: 18px auto 0;
+
+  padding: 4px 8px;
+
+  border: none;
+
+  background: transparent;
+
+  color: #087ea4;
+
+  font-size: 0.86rem;
+
+  font-weight: 750;
+}
+
+.back-link:hover {
+  color: #2563eb;
+
+  text-decoration: underline;
+}
+
+
+/* =========================================================
+   DASHBOARD
+   ========================================================= */
+
+.dashboard-page {
+  min-height: 100vh;
+
+  background:
+    radial-gradient(
+      circle at 10% 10%,
+      rgba(14, 165, 233, 0.10),
+      transparent 30%
+    ),
+    radial-gradient(
+      circle at 90% 90%,
+      rgba(37, 99, 235, 0.10),
+      transparent 30%
+    ),
+    #f4f9fc;
+}
+
+
+/* =========================================================
+   NAVIGATION
+   ========================================================= */
+
+.dashboard-nav {
+  width: 100%;
+
+  min-height: 78px;
+
+  padding: 0 7%;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  background: rgba(255, 255, 255, 0.92);
+
+  border-bottom: 1px solid rgba(226, 232, 240, 0.8);
+
+  backdrop-filter: blur(15px);
+
+  position: sticky;
+  top: 0;
+
+  z-index: 100;
+}
+
+.dashboard-nav h2 {
+  margin: 0;
+
+  color: #087ea4;
+
+  font-size: 1.35rem;
+
+  font-weight: 850;
+
+  letter-spacing: -0.025em;
+}
+
+.dashboard-nav button {
+  border: none;
+
+  border-radius: 11px;
+
+  padding: 10px 18px;
+
+  background: #e8f6fa;
+
+  color: #087ea4;
+
+  font-weight: 750;
+
+  transition:
+    background 0.2s ease,
+    transform 0.2s ease;
+}
+
+.dashboard-nav button:hover {
+  background: #d7eef5;
+
+  transform: translateY(-1px);
+}
+
+
+/* =========================================================
+   DASHBOARD CONTENT
+   ========================================================= */
+
+.dashboard-content {
+  width: min(1120px, 90%);
+
+  margin: 0 auto;
+
+  padding: 70px 0 90px;
+}
+
+.dashboard-content > h1 {
+  margin: 0 0 12px;
+
+  color: #172033;
+
+  font-size: clamp(2.2rem, 5vw, 3.7rem);
+
+  line-height: 1.05;
+
+  letter-spacing: -0.045em;
+}
+
+.dashboard-content > p {
+  margin: 0 0 40px;
+
+  color: #64748b;
+
+  font-size: 1.05rem;
+
+  line-height: 1.7;
+}
+
+
+/* =========================================================
+   DASHBOARD CARDS
+   ========================================================= */
+
+.dashboard-cards {
+  display: grid;
+
+  grid-template-columns:
+    repeat(
+      auto-fit,
+      minmax(260px, 1fr)
+    );
+
+  gap: 22px;
+}
+
+.dashboard-card {
+  padding: 30px;
+
+  border-radius: 22px;
+
+  background: rgba(255, 255, 255, 0.94);
+
+  border: 1px solid rgba(226, 232, 240, 0.85);
+
+  box-shadow:
+    0 12px 35px rgba(15, 23, 42, 0.07);
+
+  transition:
+    transform 0.25s ease,
+    box-shadow 0.25s ease,
+    border-color 0.25s ease;
+}
+
+.dashboard-card:hover {
+  transform: translateY(-6px);
+
+  border-color: rgba(14, 165, 233, 0.30);
+
+  box-shadow:
+    0 20px 45px rgba(15, 23, 42, 0.11);
+}
+
+.dashboard-card h2 {
+  margin: 0 0 14px;
+
+  color: #172033;
+
+  font-size: 1.3rem;
+
+  line-height: 1.3;
+}
+
+.dashboard-card p {
+  margin: 0 0 22px;
+
+  color: #64748b;
+
+  font-size: 0.95rem;
+
+  line-height: 1.7;
+}
+
+.dashboard-card button {
+  border: none;
+
+  border-radius: 11px;
+
+  padding: 11px 18px;
+
+  background:
+    linear-gradient(
+      100deg,
+      #087ea4,
+      #2563eb
+    );
+
+  color: white;
+
+  font-weight: 750;
+
+  box-shadow:
+    0 8px 18px rgba(37, 99, 235, 0.16);
+
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.dashboard-card button:hover {
+  transform: translateY(-2px);
+
+  box-shadow:
+    0 12px 23px rgba(37, 99, 235, 0.22);
+}
+
+
+/* =========================================================
+   MY TRIPS
+   ========================================================= */
+
+.dashboard-cards .dashboard-card {
+  position: relative;
+  overflow: hidden;
+}
+
+.dashboard-cards .dashboard-card::before {
+  content: "";
+
+  position: absolute;
+
+  top: 0;
+  left: 0;
+  right: 0;
+
+  height: 4px;
+
+  background:
+    linear-gradient(
+      90deg,
+      #087ea4,
+      #2563eb
+    );
+}
+
+.dashboard-cards .dashboard-card h2 {
+  padding-top: 4px;
+}
+
+.dashboard-card strong {
+  color: #334155;
+}
+
+.dashboard-card p strong {
+  font-weight: 800;
+}
+
+.dashboard-card p {
   margin-bottom: 10px;
 }
 
-footer p {
-  color: #cbd5e1;
-  margin: 6px;
+
+/* =========================================================
+   MY TRIPS BUTTON AREA
+   ========================================================= */
+
+.dashboard-card > div[style] {
+  margin-top: 20px !important;
+
+  padding-top: 18px;
+
+  border-top: 1px solid #e8eef4;
 }
 
-/* Responsive */
+.dashboard-card > div[style] button {
+  min-width: 125px;
+}
 
-@media (max-width: 768px) {
+.dashboard-card > div[style] button:first-child {
+  background: #087ea4;
+}
 
-  .navbar {
-    padding: 0 20px;
+.dashboard-card > div[style] button:last-child {
+  background: #fff1f2;
+
+  color: #be123c;
+
+  box-shadow: none;
+
+  border: 1px solid #fecdd3;
+}
+
+.dashboard-card > div[style] button:last-child:hover {
+  background: #ffe4e6;
+
+  color: #9f1239;
+}
+
+
+/* =========================================================
+   VIEW TRIP
+   ========================================================= */
+
+.dashboard-card .trip-plan {
+  margin-top: 28px;
+
+  padding: 24px;
+
+  border-radius: 18px;
+
+  background:
+    linear-gradient(
+      145deg,
+      #f8fcff,
+      #eef8fc
+    );
+
+  border: 1px solid #dbeaf2;
+
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.8);
+}
+
+.dashboard-card .trip-plan h2,
+.dashboard-card .trip-plan h3 {
+  margin: 0 0 18px;
+
+  color: #087ea4;
+
+  font-size: 1.2rem;
+}
+
+.dashboard-card .trip-plan pre {
+  margin: 0;
+
+  padding: 20px;
+
+  border-radius: 14px;
+
+  background: #ffffff;
+
+  border: 1px solid #e2e8f0;
+
+  color: #334155;
+
+  font-family:
+    Inter,
+    ui-sans-serif,
+    system-ui,
+    sans-serif;
+
+  font-size: 0.92rem;
+
+  line-height: 1.8;
+
+  white-space: pre-wrap;
+
+  overflow-x: auto;
+}
+
+.dashboard-content > .dashboard-card {
+  max-width: 900px;
+
+  margin: 0 auto;
+}
+
+.dashboard-content > .dashboard-card > h1 {
+  margin: 0 0 25px;
+
+  color: #172033;
+
+  font-size: clamp(2rem, 5vw, 3.2rem);
+
+  letter-spacing: -0.04em;
+}
+
+.dashboard-content > .dashboard-card > p {
+  display: inline-flex;
+
+  align-items: center;
+
+  margin: 0 10px 12px 0;
+
+  padding: 9px 13px;
+
+  border-radius: 10px;
+
+  background: #f1f8fb;
+
+  color: #475569;
+
+  font-size: 0.9rem;
+}
+
+
+/* =========================================================
+   TRIP PLANNER
+   ========================================================= */
+
+.trip-page {
+  min-height: 100vh;
+
+  background:
+    radial-gradient(
+      circle at 10% 10%,
+      rgba(14, 165, 233, 0.10),
+      transparent 30%
+    ),
+    #f4f9fc;
+}
+
+.trip-content {
+  width: min(760px, 90%);
+
+  margin: 0 auto;
+
+  padding: 65px 0 90px;
+}
+
+.trip-card {
+  padding: 42px;
+
+  border-radius: 26px;
+
+  background: rgba(255, 255, 255, 0.94);
+
+  border: 1px solid #e2e8f0;
+
+  box-shadow:
+    0 20px 55px rgba(15, 23, 42, 0.08);
+}
+
+.trip-card h1 {
+  margin: 0 0 10px;
+
+  color: #172033;
+
+  font-size: 2.5rem;
+
+  letter-spacing: -0.04em;
+}
+
+.trip-card > p {
+  margin: 0 0 32px;
+
+  color: #64748b;
+
+  line-height: 1.7;
+}
+
+.trip-card form {
+  display: flex;
+
+  flex-direction: column;
+}
+
+.trip-card label {
+  margin-bottom: 8px;
+
+  color: #334155;
+
+  font-size: 0.9rem;
+
+  font-weight: 750;
+}
+
+.trip-card input {
+  width: 100%;
+
+  padding: 14px 15px;
+
+  margin-bottom: 21px;
+
+  border: 1px solid #dbe3ec;
+
+  border-radius: 13px;
+
+  outline: none;
+
+  background: #fbfdff;
+
+  color: #172033;
+
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.trip-card input:focus {
+  border-color: #0891b2;
+
+  background: white;
+
+  box-shadow:
+    0 0 0 4px rgba(8, 145, 178, 0.10);
+}
+
+.trip-card form button {
+  margin-top: 5px;
+
+  padding: 15px;
+
+  border: none;
+
+  border-radius: 13px;
+
+  background:
+    linear-gradient(
+      100deg,
+      #087ea4,
+      #2563eb
+    );
+
+  color: white;
+
+  font-weight: 800;
+
+  box-shadow:
+    0 12px 25px rgba(37, 99, 235, 0.18);
+
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.trip-card form button:hover:not(:disabled) {
+  transform: translateY(-2px);
+
+  box-shadow:
+    0 16px 30px rgba(37, 99, 235, 0.23);
+}
+
+
+/* =========================================================
+   SUCCESS / ERROR
+   ========================================================= */
+
+.trip-error {
+  margin: 18px 0 0;
+
+  padding: 13px 15px;
+
+  border-radius: 12px;
+
+  background: #fff1f2;
+
+  color: #be123c;
+
+  font-size: 0.9rem;
+
+  font-weight: 650;
+}
+
+.trip-success {
+  margin: 18px 0 0;
+
+  padding: 13px 15px;
+
+  border-radius: 12px;
+
+  background: #ecfdf5;
+
+  color: #047857;
+
+  font-size: 0.9rem;
+
+  font-weight: 650;
+}
+
+
+/* =========================================================
+   MOBILE RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 900px) {
+
+  .login-page {
+    padding: 15px;
   }
 
-  .nav-links {
-    gap: 10px;
+  .login-container {
+    grid-template-columns: 1fr;
+
+    min-height: auto;
+
+    max-width: 650px;
   }
 
-  .nav-links a {
-    display: none;
-  }
-
-  .hero-section {
-    padding: 60px 25px;
+  .login-hero {
+    padding: 50px 35px;
   }
 
   .hero-content h1 {
-    font-size: 38px;
+    font-size: clamp(3rem, 10vw, 4.4rem);
   }
 
-  .innovation {
-    flex-direction: column;
-    padding: 60px 25px;
+  .login-section {
+    padding: 45px 35px;
   }
 
-  .budget-box {
+}
+
+
+@media (max-width: 600px) {
+
+  .login-page {
+    padding: 0;
+  }
+
+  .login-container {
+    border-radius: 0;
+
+    min-height: 100vh;
+  }
+
+  .login-hero {
+    padding: 45px 25px;
+  }
+
+  .brand-badge {
+    margin-bottom: 25px;
+  }
+
+  .hero-content h1 {
+    font-size: 3.1rem;
+  }
+
+  .hero-content > p {
+    font-size: 0.95rem;
+  }
+
+  .travel-feature {
+    padding: 13px;
+  }
+
+  .travel-feature > span {
+    width: 46px;
+    height: 46px;
+
+    font-size: 1.3rem;
+  }
+
+  .login-section {
+    padding: 40px 25px;
+  }
+
+  .login-card h2 {
+    font-size: 2rem;
+  }
+
+  .trip-card {
+    padding: 28px 22px;
+  }
+
+  .trip-card h1 {
+    font-size: 2rem;
+  }
+
+  .dashboard-content {
+    width: 90%;
+
+    padding-top: 45px;
+  }
+
+  .dashboard-nav {
+    padding: 0 5%;
+  }
+
+  .dashboard-nav h2 {
+    font-size: 1.1rem;
+  }
+
+  .dashboard-nav button {
+    padding: 9px 12px;
+
+    font-size: 0.8rem;
+  }
+
+  .forgot-modal {
+    padding: 30px 22px;
+
+    border-radius: 21px;
+  }
+
+  .forgot-modal h2 {
+    font-size: 1.5rem;
+  }
+
+  .dashboard-content > .dashboard-card {
+    padding: 22px 18px;
+  }
+
+  .dashboard-content > .dashboard-card > h1 {
+    font-size: 2rem;
+  }
+
+  .dashboard-content > .dashboard-card > p {
+    display: flex;
+
     width: 100%;
-    max-width: 350px;
+
+    margin-right: 0;
   }
+
+  .dashboard-card .trip-plan {
+    padding: 16px;
+  }
+
+  .dashboard-card .trip-plan pre {
+    padding: 15px;
+
+    font-size: 0.82rem;
+
+    line-height: 1.65;
+  }
+
+  .dashboard-card > div[style] {
+    flex-direction: column !important;
+  }
+
+  .dashboard-card > div[style] button {
+    width: 100%;
+  }
+
 }
