@@ -74,6 +74,12 @@ public class SecurityConfig {
                                 "/api/users/reset-password"
                         ).permitAll()
 
+                        // Destination / Explore API
+                        .requestMatchers(
+                                HttpMethod.GET,
+                                "/api/destinations/search"
+                        ).permitAll()
+
                         // CORS
                         .requestMatchers(
                                 HttpMethod.OPTIONS,
