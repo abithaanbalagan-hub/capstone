@@ -60,9 +60,14 @@ public class SecurityConfig {
                                 "/v3/api-docs/**"
                         ).permitAll()
 
+                        // Registration API
+                        .requestMatchers(
+                                HttpMethod.POST,
+                                "/api/users"
+                        ).permitAll()
+
                         // Authentication APIs
                         .requestMatchers(
-                                "/api/users/register",
                                 "/api/users/login",
                                 "/api/users/forgot-password",
                                 "/api/users/verify-otp",

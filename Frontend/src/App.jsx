@@ -882,6 +882,7 @@ function ExploreDestinations({
 
 
 function Dashboard({
+  userEmail,
   onLogout,
   onPlanTrip,
   onMyTrips,
@@ -908,6 +909,12 @@ function Dashboard({
         <h1>
           Plan Your Next Adventure ✈️
         </h1>
+
+        {userEmail && (
+          <p className="dashboard-user-email">
+            Logged in as: <strong>{userEmail}</strong>
+          </p>
+        )}
 
         <p>
           Discover places, plan trips and create
@@ -987,6 +994,33 @@ function App() {
   const [selectedDestination, setSelectedDestination] =
     useState('')
 
+  const [userEmail, setUserEmail] = useState('')
+
+  useEffect(() => {
+    const storedUser = localStorage.getItem('smarttripUser')
+
+    if (!storedUser) {
+      setUserEmail('')
+      return
+    }
+
+    try {
+      const user = JSON.parse(storedUser)
+
+      if (typeof user === 'string') {
+        setUserEmail(user)
+      } else {
+        setUserEmail(
+          user?.email ||
+          user?.userEmail ||
+          ''
+        )
+      }
+    } catch {
+      setUserEmail(storedUser)
+    }
+  }, [page])
+
 
   return (
     <>
@@ -1020,6 +1054,7 @@ function App() {
       {page === 'dashboard' && (
 
         <Dashboard
+          userEmail={userEmail}
 
           onLogout={() => {
 

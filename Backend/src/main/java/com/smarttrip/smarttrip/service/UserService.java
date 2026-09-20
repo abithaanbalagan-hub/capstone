@@ -38,7 +38,54 @@ public class UserService {
             user.setPassword(passwordEncoder.encode(user.getPassword()));
         }
 
-        return userRepository.save(user);
+        User savedUser = userRepository.save(user);
+
+        // Send welcome email only after successful registration
+        sendWelcomeEmail(savedUser);
+
+        return savedUser;
+    }
+
+    private void sendWelcomeEmail(User user) {
+
+        try {
+            SimpleMailMessage message = new SimpleMailMessage();
+
+            message.setTo(user.getEmail());
+            message.setSubject("Welcome to SmartTrip Planner! ✈️");
+
+            message.setText(
+                    "Hello " + user.getName() + ",\n\n"
+                            + "Welcome to SmartTrip Planner! 🌍\n\n"
+                            + "Your account has been successfully created.\n\n"
+                            + "Registered Email: " + user.getEmail() + "\n\n"
+                            + "You can now login to SmartTrip Planner and start planning "
+                            + "your trips, discovering destinations and creating personalized "
+                            + "travel plans.\n\n"
+                            + "Happy Travelling! ✈️\n\n"
+                            + "Regards,\n"
+                            + "SmartTrip Planner Team"
+            );
+
+            mailSender.send(message);
+
+            System.out.println(
+                    "Welcome email sent successfully to "
+                            + user.getEmail()
+            );
+
+        } catch (Exception e) {
+
+            // Registration should remain successful even if email delivery fails.
+            System.out.println(
+                    "Welcome email could not be sent to "
+                            + user.getEmail()
+            );
+
+            System.out.println(
+                    "Email error: " + e.getMessage()
+            );
+        }
     }
 
     public User loginUser(String email, String password) {
