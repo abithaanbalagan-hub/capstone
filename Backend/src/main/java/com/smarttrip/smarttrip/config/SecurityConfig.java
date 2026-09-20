@@ -3,6 +3,8 @@ package com.smarttrip.smarttrip.config;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
@@ -80,7 +82,7 @@ public class SecurityConfig {
                                 "/api/destinations/search"
                         ).permitAll()
 
-                        // CORS
+                        // CORS preflight
                         .requestMatchers(
                                 HttpMethod.OPTIONS,
                                 "/**"
@@ -96,6 +98,17 @@ public class SecurityConfig {
                 );
 
         return http.build();
+    }
+
+    @Bean
+    public UserDetailsService userDetailsService() {
+
+        return username -> {
+            throw new UsernameNotFoundException(
+                    "Spring Security default user is not used. " +
+                    "SmartTrip uses JWT authentication."
+            );
+        };
     }
 
     @Bean
