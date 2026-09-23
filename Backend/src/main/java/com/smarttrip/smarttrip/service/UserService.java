@@ -31,29 +31,60 @@ public class UserService {
         this.passwordEncoder = new BCryptPasswordEncoder();
     }
 
-    // =========================
-    // REGISTRATION OTP
-    // =========================
+    /*
+     * Existing user save method.
+     *
+     * Kept for existing UserService tests and backward compatibility.
+     */
+    public User saveUser(User user) {
 
+        if (user.getPassword() != null
+                && !user.getPassword().isBlank()) {
+
+            user.setPassword(
+                    passwordEncoder.encode(user.getPassword())
+            );
+        }
+
+        User savedUser =
+                userRepository.save(user);
+
+        sendWelcomeEmail(savedUser);
+
+        return savedUser;
+    }
+
+    // Registration - Send OTP
     public boolean sendRegistrationOtp(User user) {
 
-        if (user.getEmail() == null || user.getEmail().isBlank()) {
+        if (user.getEmail() == null
+                || user.getEmail().isBlank()) {
+
             return false;
         }
 
-        if (userRepository.findByEmail(user.getEmail()).isPresent()) {
+        if (userRepository
+                .findByEmail(user.getEmail())
+                .isPresent()) {
+
             return false;
         }
 
         String otp =
-                String.valueOf(100000 + new Random().nextInt(900000));
+                String.valueOf(
+                        100000 + new Random().nextInt(900000)
+                );
 
         user.setPassword(
-                passwordEncoder.encode(user.getPassword())
+                passwordEncoder.encode(
+                        user.getPassword()
+                )
         );
 
         user.setEmailVerified(false);
+
         user.setRegistrationOtp(otp);
+
         user.setRegistrationOtpExpiry(
                 LocalDateTime.now().plusMinutes(5)
         );
@@ -66,6 +97,7 @@ public class UserService {
                     new SimpleMailMessage();
 
             message.setTo(user.getEmail());
+
             message.setSubject(
                     "SmartTrip - Registration OTP"
             );
@@ -108,13 +140,16 @@ public class UserService {
         }
     }
 
+    // Registration - Verify OTP
     public User verifyRegistrationOtp(
             String email,
             String otp
     ) {
 
         User user =
-                userRepository.findByEmail(email).orElse(null);
+                userRepository
+                        .findByEmail(email)
+                        .orElse(null);
 
         if (user == null) {
             return null;
@@ -141,7 +176,9 @@ public class UserService {
         }
 
         user.setEmailVerified(true);
+
         user.setRegistrationOtp(null);
+
         user.setRegistrationOtpExpiry(null);
 
         User verifiedUser =
@@ -152,10 +189,7 @@ public class UserService {
         return verifiedUser;
     }
 
-    // =========================
-    // WELCOME EMAIL
-    // =========================
-
+    // Welcome Email
     private void sendWelcomeEmail(User user) {
 
         try {
@@ -204,24 +238,23 @@ public class UserService {
         }
     }
 
-    // =========================
-    // LOGIN
-    // =========================
-
+    // Login
     public User loginUser(
             String email,
             String password
     ) {
 
         User user =
-                userRepository.findByEmail(email).orElse(null);
+                userRepository
+                        .findByEmail(email)
+                        .orElse(null);
 
         if (user != null
                 && user.getPassword() != null
                 && passwordEncoder.matches(
-                password,
-                user.getPassword()
-        )) {
+                        password,
+                        user.getPassword()
+                )) {
 
             return user;
         }
@@ -229,16 +262,15 @@ public class UserService {
         return null;
     }
 
-    // =========================
-    // FORGOT PASSWORD OTP
-    // =========================
-
+    // Forgot Password - Send OTP
     public boolean sendPasswordResetOtp(
             String email
     ) {
 
         User user =
-                userRepository.findByEmail(email).orElse(null);
+                userRepository
+                        .findByEmail(email)
+                        .orElse(null);
 
         if (user == null) {
             return false;
@@ -256,12 +288,15 @@ public class UserService {
                 new PasswordResetToken();
 
         resetToken.setEmail(email);
+
         resetToken.setOtp(otp);
+
         resetToken.setExpiryTime(
                 LocalDateTime.now().plusMinutes(5)
         );
 
-        passwordResetTokenRepository.save(resetToken);
+        passwordResetTokenRepository
+                .save(resetToken);
 
         SimpleMailMessage message =
                 new SimpleMailMessage();
@@ -288,6 +323,7 @@ public class UserService {
         return true;
     }
 
+    // Forgot Password - Verify OTP
     public boolean verifyPasswordResetOtp(
             String email,
             String otp
@@ -314,6 +350,7 @@ public class UserService {
         return resetToken.getOtp().equals(otp);
     }
 
+    // Forgot Password - Reset Password
     public boolean resetPassword(
             String email,
             String otp,
@@ -321,14 +358,19 @@ public class UserService {
     ) {
 
         boolean otpValid =
-                verifyPasswordResetOtp(email, otp);
+                verifyPasswordResetOtp(
+                        email,
+                        otp
+                );
 
         if (!otpValid) {
             return false;
         }
 
         User user =
-                userRepository.findByEmail(email).orElse(null);
+                userRepository
+                        .findByEmail(email)
+                        .orElse(null);
 
         if (user == null) {
             return false;
