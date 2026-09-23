@@ -31,36 +31,153 @@ public class UserService {
         this.passwordEncoder = new BCryptPasswordEncoder();
     }
 
-    public User saveUser(User user) {
+    // =========================
+    // REGISTRATION OTP
+    // =========================
 
-        // Hash password before saving
-        if (user.getPassword() != null && !user.getPassword().isBlank()) {
-            user.setPassword(passwordEncoder.encode(user.getPassword()));
+    public boolean sendRegistrationOtp(User user) {
+
+        if (user.getEmail() == null || user.getEmail().isBlank()) {
+            return false;
         }
 
-        User savedUser = userRepository.save(user);
+        if (userRepository.findByEmail(user.getEmail()).isPresent()) {
+            return false;
+        }
 
-        // Send welcome email only after successful registration
-        sendWelcomeEmail(savedUser);
+        String otp =
+                String.valueOf(100000 + new Random().nextInt(900000));
 
-        return savedUser;
-    }
+        user.setPassword(
+                passwordEncoder.encode(user.getPassword())
+        );
 
-    private void sendWelcomeEmail(User user) {
+        user.setEmailVerified(false);
+        user.setRegistrationOtp(otp);
+        user.setRegistrationOtpExpiry(
+                LocalDateTime.now().plusMinutes(5)
+        );
+
+        userRepository.save(user);
 
         try {
-            SimpleMailMessage message = new SimpleMailMessage();
+
+            SimpleMailMessage message =
+                    new SimpleMailMessage();
 
             message.setTo(user.getEmail());
-            message.setSubject("Welcome to SmartTrip Planner! ✈️");
+            message.setSubject(
+                    "SmartTrip - Registration OTP"
+            );
 
             message.setText(
                     "Hello " + user.getName() + ",\n\n"
                             + "Welcome to SmartTrip Planner! 🌍\n\n"
-                            + "Your account has been successfully created.\n\n"
+                            + "Your registration OTP is:\n\n"
+                            + otp + "\n\n"
+                            + "This OTP is valid for 5 minutes.\n\n"
+                            + "Please enter this OTP in SmartTrip Planner "
+                            + "to complete your registration.\n\n"
+                            + "If you did not create this account, "
+                            + "please ignore this email.\n\n"
+                            + "Regards,\n"
+                            + "SmartTrip Planner Team"
+            );
+
+            mailSender.send(message);
+
+            System.out.println(
+                    "Registration OTP sent successfully to "
+                            + user.getEmail()
+            );
+
+            return true;
+
+        } catch (Exception e) {
+
+            System.out.println(
+                    "Registration OTP could not be sent to "
+                            + user.getEmail()
+            );
+
+            System.out.println(
+                    "Email error: " + e.getMessage()
+            );
+
+            return false;
+        }
+    }
+
+    public User verifyRegistrationOtp(
+            String email,
+            String otp
+    ) {
+
+        User user =
+                userRepository.findByEmail(email).orElse(null);
+
+        if (user == null) {
+            return null;
+        }
+
+        if (user.isEmailVerified()) {
+            return user;
+        }
+
+        if (user.getRegistrationOtp() == null
+                || user.getRegistrationOtpExpiry() == null) {
+
+            return null;
+        }
+
+        if (user.getRegistrationOtpExpiry()
+                .isBefore(LocalDateTime.now())) {
+
+            return null;
+        }
+
+        if (!user.getRegistrationOtp().equals(otp)) {
+            return null;
+        }
+
+        user.setEmailVerified(true);
+        user.setRegistrationOtp(null);
+        user.setRegistrationOtpExpiry(null);
+
+        User verifiedUser =
+                userRepository.save(user);
+
+        sendWelcomeEmail(verifiedUser);
+
+        return verifiedUser;
+    }
+
+    // =========================
+    // WELCOME EMAIL
+    // =========================
+
+    private void sendWelcomeEmail(User user) {
+
+        try {
+
+            SimpleMailMessage message =
+                    new SimpleMailMessage();
+
+            message.setTo(user.getEmail());
+
+            message.setSubject(
+                    "Welcome to SmartTrip Planner! ✈️"
+            );
+
+            message.setText(
+                    "Hello " + user.getName() + ",\n\n"
+                            + "Welcome to SmartTrip Planner! 🌍\n\n"
+                            + "Your account has been successfully created "
+                            + "and your email has been verified.\n\n"
                             + "Registered Email: " + user.getEmail() + "\n\n"
-                            + "You can now login to SmartTrip Planner and start planning "
-                            + "your trips, discovering destinations and creating personalized "
+                            + "You can now login to SmartTrip Planner and "
+                            + "start planning your trips, discovering "
+                            + "destinations and creating personalized "
                             + "travel plans.\n\n"
                             + "Happy Travelling! ✈️\n\n"
                             + "Regards,\n"
@@ -76,7 +193,6 @@ public class UserService {
 
         } catch (Exception e) {
 
-            // Registration should remain successful even if email delivery fails.
             System.out.println(
                     "Welcome email could not be sent to "
                             + user.getEmail()
@@ -88,13 +204,24 @@ public class UserService {
         }
     }
 
-    public User loginUser(String email, String password) {
+    // =========================
+    // LOGIN
+    // =========================
 
-        User user = userRepository.findByEmail(email).orElse(null);
+    public User loginUser(
+            String email,
+            String password
+    ) {
+
+        User user =
+                userRepository.findByEmail(email).orElse(null);
 
         if (user != null
                 && user.getPassword() != null
-                && passwordEncoder.matches(password, user.getPassword())) {
+                && passwordEncoder.matches(
+                password,
+                user.getPassword()
+        )) {
 
             return user;
         }
@@ -102,39 +229,56 @@ public class UserService {
         return null;
     }
 
-    public boolean sendPasswordResetOtp(String email) {
+    // =========================
+    // FORGOT PASSWORD OTP
+    // =========================
 
-        User user = userRepository.findByEmail(email).orElse(null);
+    public boolean sendPasswordResetOtp(
+            String email
+    ) {
+
+        User user =
+                userRepository.findByEmail(email).orElse(null);
 
         if (user == null) {
             return false;
         }
 
-        // Generate 6-digit OTP
-        String otp = String.valueOf(100000 + new Random().nextInt(900000));
+        String otp =
+                String.valueOf(
+                        100000 + new Random().nextInt(900000)
+                );
 
-        // Delete old OTP for this email
-        passwordResetTokenRepository.deleteByEmail(email);
+        passwordResetTokenRepository
+                .deleteByEmail(email);
 
-        // Create new reset token
-        PasswordResetToken resetToken = new PasswordResetToken();
+        PasswordResetToken resetToken =
+                new PasswordResetToken();
+
         resetToken.setEmail(email);
         resetToken.setOtp(otp);
-        resetToken.setExpiryTime(LocalDateTime.now().plusMinutes(5));
+        resetToken.setExpiryTime(
+                LocalDateTime.now().plusMinutes(5)
+        );
 
         passwordResetTokenRepository.save(resetToken);
 
-        // Send OTP through Gmail
-        SimpleMailMessage message = new SimpleMailMessage();
+        SimpleMailMessage message =
+                new SimpleMailMessage();
 
         message.setTo(email);
-        message.setSubject("SmartTrip - Password Reset OTP");
+
+        message.setSubject(
+                "SmartTrip - Password Reset OTP"
+        );
+
         message.setText(
                 "Hello " + user.getName() + ",\n\n"
                         + "Your SmartTrip password reset OTP is:\n\n"
                         + otp + "\n\n"
                         + "This OTP is valid for 5 minutes.\n\n"
-                        + "If you did not request a password reset, please ignore this email.\n\n"
+                        + "If you did not request a password reset, "
+                        + "please ignore this email.\n\n"
                         + "Regards,\n"
                         + "SmartTrip Team"
         );
@@ -144,43 +288,60 @@ public class UserService {
         return true;
     }
 
-    public boolean verifyPasswordResetOtp(String email, String otp) {
+    public boolean verifyPasswordResetOtp(
+            String email,
+            String otp
+    ) {
 
         PasswordResetToken resetToken =
-                passwordResetTokenRepository.findByEmail(email).orElse(null);
+                passwordResetTokenRepository
+                        .findByEmail(email)
+                        .orElse(null);
 
         if (resetToken == null) {
             return false;
         }
 
-        if (resetToken.getExpiryTime().isBefore(LocalDateTime.now())) {
-            passwordResetTokenRepository.deleteByEmail(email);
+        if (resetToken.getExpiryTime()
+                .isBefore(LocalDateTime.now())) {
+
+            passwordResetTokenRepository
+                    .deleteByEmail(email);
+
             return false;
         }
 
         return resetToken.getOtp().equals(otp);
     }
 
-    public boolean resetPassword(String email, String otp, String newPassword) {
+    public boolean resetPassword(
+            String email,
+            String otp,
+            String newPassword
+    ) {
 
-        boolean otpValid = verifyPasswordResetOtp(email, otp);
+        boolean otpValid =
+                verifyPasswordResetOtp(email, otp);
 
         if (!otpValid) {
             return false;
         }
 
-        User user = userRepository.findByEmail(email).orElse(null);
+        User user =
+                userRepository.findByEmail(email).orElse(null);
 
         if (user == null) {
             return false;
         }
 
-        // Hash new password before saving
-        user.setPassword(passwordEncoder.encode(newPassword));
+        user.setPassword(
+                passwordEncoder.encode(newPassword)
+        );
+
         userRepository.save(user);
 
-        // OTP can no longer be used after password reset
-        passwordResetTokenRepository.deleteByEmail(email);
+        passwordResetTokenRepository
+                .deleteByEmail(email);
 
         return true;
     }

@@ -73,6 +73,7 @@ public class SecurityConfig {
                                 "/api/users/login",
                                 "/api/users/forgot-password",
                                 "/api/users/verify-otp",
+                                "/api/users/verify-registration-otp",
                                 "/api/users/reset-password"
                         ).permitAll()
 
