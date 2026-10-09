@@ -20,7 +20,9 @@ public class SecurityConfig {
 
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
 
-    public SecurityConfig(JwtAuthenticationFilter jwtAuthenticationFilter) {
+    public SecurityConfig(
+            JwtAuthenticationFilter jwtAuthenticationFilter
+    ) {
         this.jwtAuthenticationFilter = jwtAuthenticationFilter;
     }
 
@@ -33,7 +35,9 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
 
                 .cors(cors ->
-                        cors.configurationSource(corsConfigurationSource())
+                        cors.configurationSource(
+                                corsConfigurationSource()
+                        )
                 )
 
                 .formLogin(form -> form.disable())
@@ -81,6 +85,12 @@ public class SecurityConfig {
                         .requestMatchers(
                                 HttpMethod.GET,
                                 "/api/destinations/search"
+                        ).permitAll()
+
+                        // Weather API
+                        .requestMatchers(
+                                HttpMethod.GET,
+                                "/api/weather"
                         ).permitAll()
 
                         // CORS preflight

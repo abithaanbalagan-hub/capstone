@@ -30,6 +30,110 @@ function TripPlanner({ onBack, selectedDestination = '' }) {
   const [loading, setLoading] =
     useState(false)
 
+  const [weather, setWeather] =
+    useState(null)
+
+  const [weatherLoading, setWeatherLoading] =
+    useState(false)
+
+  const [weatherError, setWeatherError] =
+    useState('')
+
+  const [weatherLocation, setWeatherLocation] =
+    useState('')
+
+  const getWeatherDescription = (code) => {
+    const weatherCodes = {
+      0: { text: 'Clear sky', icon: '☀️' },
+      1: { text: 'Mainly clear', icon: '🌤️' },
+      2: { text: 'Partly cloudy', icon: '⛅' },
+      3: { text: 'Overcast', icon: '☁️' },
+      45: { text: 'Fog', icon: '🌫️' },
+      48: { text: 'Rime fog', icon: '🌫️' },
+      51: { text: 'Light drizzle', icon: '🌦️' },
+      53: { text: 'Moderate drizzle', icon: '🌦️' },
+      55: { text: 'Dense drizzle', icon: '🌧️' },
+      61: { text: 'Slight rain', icon: '🌦️' },
+      63: { text: 'Moderate rain', icon: '🌧️' },
+      65: { text: 'Heavy rain', icon: '🌧️' },
+      71: { text: 'Slight snow', icon: '🌨️' },
+      73: { text: 'Moderate snow', icon: '🌨️' },
+      75: { text: 'Heavy snow', icon: '❄️' },
+      80: { text: 'Slight rain showers', icon: '🌦️' },
+      81: { text: 'Moderate rain showers', icon: '🌧️' },
+      82: { text: 'Violent rain showers', icon: '⛈️' },
+      95: { text: 'Thunderstorm', icon: '⛈️' },
+      96: { text: 'Thunderstorm with hail', icon: '⛈️' },
+      99: { text: 'Thunderstorm with heavy hail', icon: '⛈️' }
+    }
+
+    return weatherCodes[code] || {
+      text: 'Weather information available',
+      icon: '🌦️'
+    }
+  }
+
+  useEffect(() => {
+    const cleanDestination = destination.trim()
+
+    if (cleanDestination.length < 2) {
+      setWeather(null)
+      setWeatherError('')
+      setWeatherLocation('')
+      return
+    }
+
+    const timer = setTimeout(async () => {
+      try {
+        setWeatherLoading(true)
+        setWeatherError('')
+
+        const geocodeResponse = await fetch(
+          `https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(cleanDestination)}&count=1&language=en&format=json`
+        )
+
+        if (!geocodeResponse.ok) {
+          throw new Error('Unable to find destination')
+        }
+
+        const geocodeData = await geocodeResponse.json()
+
+        if (!geocodeData.results || geocodeData.results.length === 0) {
+          setWeather(null)
+          setWeatherLocation('')
+          setWeatherError('Weather location not found.')
+          return
+        }
+
+        const location = geocodeData.results[0]
+
+        const weatherResponse = await fetch(
+          `http://localhost:8080/api/weather?latitude=${location.latitude}&longitude=${location.longitude}`
+        )
+
+        if (!weatherResponse.ok) {
+          throw new Error('Unable to fetch weather information')
+        }
+
+        const weatherData = await weatherResponse.json()
+
+        setWeather(weatherData.current)
+        setWeatherLocation(
+          `${location.name}${location.country ? `, ${location.country}` : ''}`
+        )
+      } catch (err) {
+        console.error('Weather error:', err)
+        setWeather(null)
+        setWeatherLocation('')
+        setWeatherError('Unable to load weather information.')
+      } finally {
+        setWeatherLoading(false)
+      }
+    }, 700)
+
+    return () => clearTimeout(timer)
+  }, [destination])
+
 
   const handleTripSubmit = async (e) => {
 
@@ -299,6 +403,101 @@ function TripPlanner({ onBack, selectedDestination = '' }) {
               }
             />
 
+
+            {weatherLoading && (
+              <p
+                style={{
+                  marginTop: '8px',
+                  color: '#1976d2',
+                  fontWeight: '600'
+                }}
+              >
+                🌦️ Checking destination weather...
+              </p>
+            )}
+
+            {weatherError && !weatherLoading && (
+              <p
+                style={{
+                  marginTop: '8px',
+                  color: '#d32f2f',
+                  fontWeight: '600'
+                }}
+              >
+                {weatherError}
+              </p>
+            )}
+
+            {weather && !weatherLoading && (
+              <div
+                style={{
+                  margin: '18px 0 22px',
+                  padding: '20px',
+                  borderRadius: '18px',
+                  background: 'linear-gradient(135deg, #eaf8ff, #f7fcff)',
+                  border: '1px solid #cfeaf7',
+                  boxShadow: '0 8px 22px rgba(25, 118, 210, 0.08)'
+                }}
+              >
+                <h3
+                  style={{
+                    margin: '0 0 6px',
+                    color: '#172b4d'
+                  }}
+                >
+                  🌦️ Destination Weather
+                </h3>
+
+                <p
+                  style={{
+                    margin: '0 0 15px',
+                    color: '#63758a',
+                    fontWeight: '600'
+                  }}
+                >
+                  📍 {weatherLocation}
+                </p>
+
+                <div
+                  style={{
+                    display: 'grid',
+                    gridTemplateColumns: 'repeat(2, minmax(0, 1fr))',
+                    gap: '12px'
+                  }}
+                >
+                  <div style={{ padding: '12px', borderRadius: '12px', background: '#ffffff' }}>
+                    <strong>🌡️ Temperature</strong>
+                    <div style={{ marginTop: '4px', fontSize: '20px' }}>
+                      {weather.temperature_2m}°C
+                    </div>
+                  </div>
+
+                  <div style={{ padding: '12px', borderRadius: '12px', background: '#ffffff' }}>
+                    <strong>💧 Humidity</strong>
+                    <div style={{ marginTop: '4px', fontSize: '20px' }}>
+                      {weather.relative_humidity_2m}%
+                    </div>
+                  </div>
+
+                  <div style={{ padding: '12px', borderRadius: '12px', background: '#ffffff' }}>
+                    <strong>💨 Wind</strong>
+                    <div style={{ marginTop: '4px', fontSize: '20px' }}>
+                      {weather.wind_speed_10m} km/h
+                    </div>
+                  </div>
+
+                  <div style={{ padding: '12px', borderRadius: '12px', background: '#ffffff' }}>
+                    <strong>
+                      {getWeatherDescription(weather.weather_code).icon}{' '}
+                      Condition
+                    </strong>
+                    <div style={{ marginTop: '4px', fontSize: '18px' }}>
+                      {getWeatherDescription(weather.weather_code).text}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
 
             <label>
               Start Date
@@ -1445,7 +1644,7 @@ function Dashboard({
             cursor: 'pointer'
           }}
         >
-          ⇥ &nbsp; Logout
+          ⇥   Logout
         </button>
 
       </nav>
@@ -1893,7 +2092,7 @@ function Dashboard({
                   '0 10px 22px rgba(255, 128, 30, 0.22)'
               }}
             >
-              Plan a Trip&nbsp; →
+              Plan a Trip  →
             </button>
 
 
@@ -1986,7 +2185,7 @@ function Dashboard({
                   '0 10px 22px rgba(37, 99, 235, 0.22)'
               }}
             >
-              Explore&nbsp; →
+              Explore  →
             </button>
 
 
@@ -2079,7 +2278,7 @@ function Dashboard({
                   '0 10px 22px rgba(19, 136, 8, 0.22)'
               }}
             >
-              My Trips&nbsp; →
+              My Trips  →
             </button>
 
 
