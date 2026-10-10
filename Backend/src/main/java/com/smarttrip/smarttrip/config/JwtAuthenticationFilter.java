@@ -1,3 +1,4 @@
+
 package com.smarttrip.smarttrip.config;
 
 import com.smarttrip.smarttrip.util.JwtUtil;
@@ -21,6 +22,21 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     public JwtAuthenticationFilter(JwtUtil jwtUtil) {
         this.jwtUtil = jwtUtil;
+    }
+
+    @Override
+    protected boolean shouldNotFilter(HttpServletRequest request) {
+        String path = request.getServletPath();
+
+        return "POST".equalsIgnoreCase(request.getMethod())
+                && (
+                    path.equals("/api/users")
+                    || path.equals("/api/users/login")
+                    || path.equals("/api/users/forgot-password")
+                    || path.equals("/api/users/verify-otp")
+                    || path.equals("/api/users/verify-registration-otp")
+                    || path.equals("/api/users/reset-password")
+                );
     }
 
     @Override
