@@ -1,0 +1,14 @@
+# Maven
+Backend/target/
+
+# IDE
+.vscode/
+.idea/
+*.iml
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Secrets
+Backend/src/main/resources/application.properties
